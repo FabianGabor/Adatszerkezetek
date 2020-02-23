@@ -115,6 +115,8 @@ compile_commands.json
 .rcc/
 .uic/
 /*-debug/
+/*/*-debug/
+/Adatszerkezetek-*/*-Debug/
 /*-release/
 /dist/gdb/*.gz
 /dist/gdb/python/
