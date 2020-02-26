@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 typedef int tarto[6];
 
@@ -35,7 +35,7 @@ int kivesz (tarto t)
 
 void beker (tarto t)
 {
-    char input[11] = "EAOBCDOOA";
+    char input[11] = "EAOOOABO";
     //printf("Kerem a jelsorozatot: ");
     //scanf("%s", input);
     printf("%d %s \n", (int)strlen(input), input);
