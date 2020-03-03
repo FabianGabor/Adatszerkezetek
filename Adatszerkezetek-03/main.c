@@ -22,20 +22,19 @@ typedef struct ember {
     int kor;
 } ember;
 
+typedef struct ember * e_pointer;
+
 typedef struct embersor {
-    int size;
-    //int alloc_size;
+    int size;    
     ember ember[5];
 } embersor;
 
 typedef struct embersor * es_pointer;
 
 es_pointer letrehoz (int alloc_size)
-{
+{    
     es_pointer x = malloc( sizeof(embersor) * alloc_size);
     x->size = 0;
-    //x->alloc_size = alloc_size;
-    //es_pointer x = malloc( sizeof(embersor) * 5 );
     return x;
 }
 
@@ -65,9 +64,9 @@ ember kivesz(es_pointer e)
     if (!ures(e))
     {
         kivett_e = e->ember[0];
-        e->size--;
-        for (int i=0; i<e->size; i++)
+        for (int i=0; i<e->size-1; i++)
             e->ember[i] = e->ember[i+1];
+        e->size--;
     }
     return kivett_e;
 }
@@ -83,15 +82,16 @@ int main()
 {    
     es_pointer embersor = letrehoz(5);
     ember uj;
+    ember kivett;
 
     kiir(embersor);
 
     strcpy(uj.nev,"1");
-    uj.kor = 33;
+    uj.kor = 11;
     ragaszt(embersor,uj);
 
     strcpy(uj.nev,"2");
-    uj.kor = 33;
+    uj.kor = 22;
     ragaszt(embersor,uj);
 
     strcpy(uj.nev,"3");
@@ -100,7 +100,12 @@ int main()
 
     kiir(embersor);
 
-    kivesz(embersor);
+    kivett = kivesz(embersor);
+    printf("Kivett:\n%s - %d \n\n", kivett.nev, kivett.kor);
+
+    kiir(embersor);
+
+    printf("Kivett:\n%s - %d\n\n", kivesz(embersor).nev); // valamiert kiirja a nevet es a kort is
 
     kiir(embersor);
 
