@@ -16,6 +16,7 @@ muveletek
 #include <string.h>
 #include <strings.h>
 
+
 typedef struct ember {
     char nev[30];
     int kor;
@@ -24,57 +25,62 @@ typedef struct ember {
 typedef struct embersor {
     int size;
     ember ember[5];
-} es;
+} embersor;
 
-typedef struct es * embersor;
+typedef struct embersor * es_pointer;
 
-embersor letrehoz ()
+es_pointer letrehoz ()
 {
-    embersor x = malloc( sizeof(es) * 5 );
+    es_pointer x = malloc( sizeof(embersor) * 5 );
     return x;
 }
 
-int ures (es e)
+int ures (embersor e)
 {
     return (e.size == 0)?1:0;
 }
 
-int tele (es *e)
+int tele (es_pointer e)
 {
     return (e->size == 5)?1:0;
 }
 
-void ragaszt(es *e, ember uj)
+void ragaszt(es_pointer e, ember uj)
 {
     if (!tele(e))
-    {
-        e->size++;
+    {        
         strcpy(e->ember[e->size].nev, uj.nev);
         e->ember[e->size].kor = uj.kor;
+        e->size++;
     }
 }
 
-void kiir(es e)
+void kiir(es_pointer e)
 {
-    /*
-    for (int i=0; i<e.size; i++)
+
+    for (int i=0; i<e->size; i++)
     {
-        printf("%s", e.ember[i].nev);
+        printf("%s - %d\n", e->ember[i].nev, e->ember[i].kor);
     }
-    */
+
 }
 
 int main()
-{
-    printf("%d\n", (int) sizeof(es) * 5);
-    embersor embersor = letrehoz();
+{    
+    es_pointer embersor = letrehoz();
     ember uj;
 
     kiir(embersor);
-    //strcpy(uj.nev,"Teszt");
-    //uj.kor = 33;
+    strcpy(uj.nev,"Teszt ember");
+    uj.kor = 33;
 
-    //kiir(embersor);
-    //ragaszt(embersor,uj);
+    ragaszt(embersor,uj);
+    kiir(embersor);
     return 0;
 }
+/*
+int main()
+{
+
+}
+*/
