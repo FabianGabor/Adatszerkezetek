@@ -57,12 +57,8 @@ void ragaszt(es_pointer e, ember uj)
 
 void kiir(es_pointer e)
 {
-
     for (int i=0; i<e->size; i++)
-    {
         printf("%s - %d\n", e->ember[i].nev, e->ember[i].kor);
-    }
-
 }
 
 int main()
