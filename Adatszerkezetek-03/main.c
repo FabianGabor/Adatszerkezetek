@@ -24,20 +24,24 @@ typedef struct ember {
 
 typedef struct embersor {
     int size;
+    //int alloc_size;
     ember ember[5];
 } embersor;
 
 typedef struct embersor * es_pointer;
 
-es_pointer letrehoz ()
+es_pointer letrehoz (int alloc_size)
 {
-    es_pointer x = malloc( sizeof(embersor) * 5 );
+    es_pointer x = malloc( sizeof(embersor) * alloc_size);
+    x->size = 0;
+    //x->alloc_size = alloc_size;
+    //es_pointer x = malloc( sizeof(embersor) * 5 );
     return x;
 }
 
-int ures (embersor e)
+int ures (es_pointer e)
 {
-    return (e.size == 0)?1:0;
+    return (e->size == 0)?1:0;
 }
 
 int tele (es_pointer e)
@@ -55,23 +59,51 @@ void ragaszt(es_pointer e, ember uj)
     }
 }
 
+ember kivesz(es_pointer e)
+{
+    ember kivett_e = {};
+    if (!ures(e))
+    {
+        kivett_e = e->ember[0];
+        e->size--;
+        for (int i=0; i<e->size; i++)
+            e->ember[i] = e->ember[i+1];
+    }
+    return kivett_e;
+}
+
 void kiir(es_pointer e)
 {
     for (int i=0; i<e->size; i++)
         printf("%s - %d\n", e->ember[i].nev, e->ember[i].kor);
+    printf("\n");
 }
 
 int main()
 {    
-    es_pointer embersor = letrehoz();
+    es_pointer embersor = letrehoz(5);
     ember uj;
 
     kiir(embersor);
-    strcpy(uj.nev,"Teszt ember");
-    uj.kor = 33;
 
+    strcpy(uj.nev,"1");
+    uj.kor = 33;
     ragaszt(embersor,uj);
+
+    strcpy(uj.nev,"2");
+    uj.kor = 33;
+    ragaszt(embersor,uj);
+
+    strcpy(uj.nev,"3");
+    uj.kor = 33;
+    ragaszt(embersor,uj);
+
     kiir(embersor);
+
+    kivesz(embersor);
+
+    kiir(embersor);
+
     return 0;
 }
 /*
