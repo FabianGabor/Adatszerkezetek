@@ -78,6 +78,11 @@ void kiir(es_pointer e)
     printf("\n");
 }
 
+void felszabadit(es_pointer e)
+{
+    free(e);
+}
+
 int main()
 {    
     es_pointer embersor = letrehoz(5);
