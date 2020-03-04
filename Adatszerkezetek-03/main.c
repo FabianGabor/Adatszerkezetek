@@ -110,8 +110,13 @@ int main()
 
     kiir(embersor);
 
-    printf("Kivett:\n%s - %d\n\n", kivesz(embersor).nev); // valamiert kiirja a nevet es a kort is
+    printf("Kivett:\n%s - %d (eletkor nem kene)\n\n", kivesz(embersor).nev); // valamiert kiirja a nevet es a kort is
 
+    kiir(embersor);
+
+    felszabadit(embersor);
+
+    printf("free()\n");
     kiir(embersor);
 
     return 0;
