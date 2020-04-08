@@ -66,7 +66,6 @@ void Osszefesul_4(int n, int X[], int m, int Y[], int *db, int Z[])
 
 
 int T(char *X) {
-    //return 0;
     return strcmp(X,"alma");
 }
 
