@@ -128,8 +128,6 @@ int main()
     char *Y[3];
     char *Z[3];
 
-    //kiir(X);
-
     Szetvalogatas_1(N, X, &dby, Y, &dbz, Z);
     kiir(X, N);
     kiir(Y, dby);
