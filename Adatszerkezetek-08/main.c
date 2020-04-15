@@ -11,15 +11,13 @@ int betesz(verem v, char x)
 {
     if (x>='A'&& x<='Z')
     {
-        v->baldb=1;
-        v->v[0]=x;
+        v->v[v->baldb++]=x;
         return 1;
     }
     else
         if (x>='0' && x<='9')
         {
-            v->jobbdb=1;
-            v->v[9]=x;
+            v->v[9-v->jobbdb++]=x;
             return 1;
         }
     return 0;
@@ -37,9 +35,12 @@ int main()
     for(i=0;i<10;i++)
         a->v[i]='_';
 
-    printf("Karakter: ");
-    char be=getchar();
-    betesz(a,be);
+    //printf("Karakter: ");
+    //char be=getchar();
+
+    char str[10] = "A43QHG54W4";
+    for (i=0; i<10; i++)
+        betesz(a,str[i]);
 
     printf("\nA verem tartalma: ");
 
