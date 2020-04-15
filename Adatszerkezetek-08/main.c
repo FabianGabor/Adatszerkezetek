@@ -34,22 +34,9 @@ int main()
     for(i=0;i<10;i++)
         a.v[i]='_';
 
+    printf("Karakter: ");
     char be=getchar();
     betesz(&a,be);
-
-    /*
-    if (be>='A'&&be<='Z')
-    {
-        a.baldb=1;
-        a.v[0]=be;
-    }
-    else
-        if (be>='0'&&be<='9')
-        {
-            a.jobbdb=1;
-            a.v[9]=be;
-        }
-    */
 
     printf("\nA verem tartalma: ");
 
