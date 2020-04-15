@@ -17,7 +17,7 @@ int betesz(verem v, char x)
     else
         if (x>='0' && x<='9')
         {
-            v->v[9-v->jobbdb++]=x;
+            v->v[sizeof(v->v)-1 - v->jobbdb++]=x;
             return 1;
         }
     return 0;
@@ -38,14 +38,14 @@ int main()
     //printf("Karakter: ");
     //char be=getchar();
 
-    char str[10] = "A43QHG54W4";
+    char str[] = "A43QHG54W4GRASDFG5234";
     for (i=0; i<10; i++)
         betesz(a,str[i]);
 
     printf("\nA verem tartalma: ");
 
     printf("|");
-    for(i=0; i<10; i++)
+    for(i=0; i<15; i++)
         printf("%c", a->v[i]);
     printf("|\n");
 
