@@ -9,6 +9,8 @@ typedef struct verem
 
 int betesz(verem v, char x)
 {
+    if (v->baldb + v->jobbdb > sizeof(v->v)-1)
+        return 0;
     if (x>='A'&& x<='Z')
     {
         v->v[v->baldb++]=x;
@@ -26,6 +28,7 @@ int betesz(verem v, char x)
 int main()
 {
     verem a = malloc(sizeof(verem));
+    int bufferOverflow = 0;
 
     a->baldb=0;
     a->jobbdb=0;
@@ -38,9 +41,11 @@ int main()
     //printf("Karakter: ");
     //char be=getchar();
 
-    char str[] = "A43QHG54W4GRASDFG5234";
-    for (i=0; i<10; i++)
-        betesz(a,str[i]);
+    char str[] = "A43QHG54W4GRASDFG5213";
+    int size = sizeof(str)-1;
+    for (i=0; i<size; i++)
+        if (!betesz(a,str[i]))
+            bufferOverflow++;
 
     printf("\nA verem tartalma: ");
 
@@ -48,6 +53,8 @@ int main()
     for(i=0; i<15; i++)
         printf("%c", a->v[i]);
     printf("|\n");
+
+    printf("Tulcsordult %d elem\n", bufferOverflow);
 
     return 0;
 }
