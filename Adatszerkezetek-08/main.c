@@ -4,9 +4,9 @@ typedef struct verem
 {
     char v[10];
     int baldb,jobbdb;
-} verem;
+} *verem;
 
-int betesz(verem *v, char x)
+int betesz(verem v, char x)
 {
     if (x>='A'&& x<='Z')
     {
@@ -27,22 +27,22 @@ int betesz(verem *v, char x)
 int main()
 {
     verem a;
-    a.baldb=0;
-    a.jobbdb=0;
+    &a->baldb=0;
+    a->jobbdb=0;
     int i;
 
     for(i=0;i<10;i++)
-        a.v[i]='_';
+        a->v[i]='_';
 
     printf("Karakter: ");
     char be=getchar();
-    betesz(&a,be);
+    betesz(a,be);
 
     printf("\nA verem tartalma: ");
 
     printf("|");
     for(i=0; i<10; i++)
-        printf("%c", a.v[i]);
+        printf("%c", a->v[i]);
     printf("|\n");
 
     return 0;
