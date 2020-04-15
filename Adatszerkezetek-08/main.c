@@ -9,7 +9,7 @@ typedef struct verem
 
 int betesz(verem v, char x)
 {
-    if (v->baldb + v->jobbdb > (int)sizeof(v->v)-1)
+    if (v->baldb + v->jobbdb >= (int)sizeof(v->v))
         return 0;
     if (x>='A'&& x<='Z')
     {
