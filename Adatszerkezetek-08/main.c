@@ -9,7 +9,7 @@ typedef struct verem
 
 int betesz(verem v, char x)
 {
-    if (v->baldb + v->jobbdb > sizeof(v->v)-1)
+    if (v->baldb + v->jobbdb > (int)sizeof(v->v)-1)
         return 0;
     if (x>='A'&& x<='Z')
     {
@@ -54,7 +54,7 @@ int main()
         printf("%c", a->v[i]);
     printf("|\n");
 
-    printf("Tulcsordult %d elem\n", bufferOverflow);
+    printf("Tulcsordult %d\n", bufferOverflow);
 
     return 0;
 }
