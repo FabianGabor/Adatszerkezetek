@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct verem
 {
@@ -26,9 +27,11 @@ int betesz(verem v, char x)
 
 int main()
 {
-    verem a;
-    &a->baldb=0;
+    verem a = malloc(sizeof(verem));
+
+    a->baldb=0;
     a->jobbdb=0;
+
     int i;
 
     for(i=0;i<10;i++)
