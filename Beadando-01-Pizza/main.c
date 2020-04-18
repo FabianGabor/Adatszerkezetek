@@ -37,12 +37,6 @@ char havi_max_pizza(havirendeles h); // 8
 void plusz_rendeles(havirendeles h, rendeles r); // 9
 void plusz_pizza(rendeles r, pizza p); // 10
 
-/*
-int havirendeles_mennyiseg (havirendeles r)
-{
-    return r.mennyiseg;
-}
-*/
 
 int main()
 {
@@ -67,7 +61,13 @@ int main()
     p = uj_pizza(4, 'D');
     r = uj_rendeles(3, 3, p);
     p = uj_pizza(5, 'E');
-    r = uj_rendeles(3, 3, p);
+    plusz_pizza(r,p);
+    p = uj_pizza(6, 'F');
+    plusz_pizza(r,p);
+
+    p = uj_pizza(3, 'F');
+    plusz_pizza(r,p);
+
     plusz_rendeles(h, r);
 
     kiir(h);
@@ -103,7 +103,8 @@ int main()
 }
 
 
-pizza uj_pizza(int db, char fajta) {
+pizza uj_pizza(int db, char fajta)
+{
     pizza p = malloc(sizeof (pizza));
     p->db = db;
     p->fajta = fajta;
@@ -111,12 +112,15 @@ pizza uj_pizza(int db, char fajta) {
     return p;
 }
 
-void pizza_torol(pizza p) {
-    free(p);
+void pizza_torol(pizza p)
+{
+    if (p != NULL)
+        free(p);
 }
 
 
-rendeles uj_rendeles(int futar, int nap, pizza p) {
+rendeles uj_rendeles(int futar, int nap, pizza p)
+{
     rendeles r = malloc(sizeof (rendeles));
     r->pizza = malloc(sizeof (pizza) * 6);
 
@@ -128,12 +132,15 @@ rendeles uj_rendeles(int futar, int nap, pizza p) {
     return r;
 }
 
-void rendeles_torol(rendeles r) {
-    free (r);
+void rendeles_torol(rendeles r)
+{
+    if (r != NULL)
+        free (r);
 }
 
 
-havirendeles uj_havirendeles(rendeles r) {
+havirendeles uj_havirendeles(rendeles r)
+{
     havirendeles h = malloc(sizeof(havirendeles));
     h->rendeles = malloc(sizeof(rendeles));
 
@@ -142,15 +149,15 @@ havirendeles uj_havirendeles(rendeles r) {
     return h;
 }
 
-void havirendeles_torol(havirendeles h) {
-    free(h);
+void havirendeles_torol(havirendeles h)
+{
+    if (h != NULL)
+        free(h);
 }
 
 
-void kiir(havirendeles h) {
-    //h.mennyiseg = sizeof (*h.rendeles) / sizeof(h.rendeles);
-    printf("Havirendeles mennyiseg: %d\n", hrMennyiseg);
-
+void kiir(havirendeles h)
+{
     for (int i=0; i<hrMennyiseg; i++) {
         printf("Rendeles: %d.\n", i+1);
         printf("\tNap: %d \n", h->rendeles[i]->nap);
@@ -169,20 +176,30 @@ void kiir(havirendeles h) {
 
 void plusz_rendeles(havirendeles h, rendeles r) // 9
 {
-
-    havirendeles temp = NULL;
-    //h = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg));
-    temp = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg)); // h-t nem irom felul, ha nem sikerul lefoglalni a memoriat
-
-    if (temp == NULL)
+    if (hrMennyiseg < 1000)
     {
-        printf("Hiba a memoria lefoglalasanal");
-        exit(1);
-    }
-    else
-    {
-        h = temp;
-    }
+        havirendeles temp = NULL;
+        //h = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg));
+        temp = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg)); // h-t nem irom felul, ha nem sikerul lefoglalni a memoriat
 
-    h->rendeles[hrMennyiseg++] = r;
+        if (temp == NULL)
+        {
+            printf("Hiba a memoria lefoglalasanal a plusz rendelesnek!");
+            exit(1);
+        }
+        else
+            h = temp;
+
+        h->rendeles[hrMennyiseg++] = r;
+    }
+}
+
+
+void plusz_pizza(rendeles r, pizza p)  // 10
+{
+    if (r->pizza[p->fajta - 'A'].db + p->db <= 9)
+    {
+        r->pizza[p->fajta - 'A'].db += p->db;
+        r->pizza[p->fajta - 'A'].fajta = p->fajta;
+    }
 }
