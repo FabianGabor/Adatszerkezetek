@@ -72,29 +72,6 @@ int main()
 
     kiir(h);
 
-    /*
-    *p = uj_pizza(9, 'B');
-    *r = uj_rendeles(2, 8, *p);
-
-    plusz_rendeles(*hr, *r);
-
-    //kiir(*hr);
-
-    *p = uj_pizza(66, 'C');
-    *r = uj_rendeles(3, 3, *p);
-
-    plusz_rendeles(*hr, *r);
-
-
-
-    //printf("%c %d\n", p->fajta, p->db);
-    kiir(*hr);
-    //printf("Rendeles mennyisege: %d\n", hr->mennyiseg);
-
-    free(p);
-    free(r);
-
-    */
     pizza_torol(p);
     rendeles_torol(r);
     havirendeles_torol(h);
