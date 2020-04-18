@@ -62,15 +62,17 @@ int main()
     r = uj_rendeles(3, 3, p);
     p = uj_pizza(5, 'E');
     plusz_pizza(r,p);
-    p = uj_pizza(6, 'F');
+    p = uj_pizza(3, 'F');
     plusz_pizza(r,p);
 
-    p = uj_pizza(3, 'F');
+    p = uj_pizza(1, 'F');
     plusz_pizza(r,p);
 
     plusz_rendeles(h, r);
 
     kiir(h);
+
+    printf("3. napi max pizza tipus: %c\n", napi_max(h,3));
 
     pizza_torol(p);
     rendeles_torol(r);
@@ -150,7 +152,6 @@ void kiir(havirendeles h)
         printf("\tFutar: %d \n", h->rendeles[i]->futar);
 
         for (int j=0; j < 6; j++)
-            //if (h->rendeles[i]->pizza[j]->db > 0)
             if (h->rendeles[i]->pizza[j].db > 0)
                 printf("\t\tPizza: %d %c \n", h->rendeles[i]->pizza[j].db, h->rendeles[i]->pizza[j].fajta);
     }
@@ -185,4 +186,39 @@ void plusz_pizza(rendeles r, pizza p)  // 10
         r->pizza[p->fajta - 'A'].db += p->db;
         r->pizza[p->fajta - 'A'].fajta = p->fajta;
     }
+}
+
+char napi_max(havirendeles h, int nap) // 4
+{
+    if (nap > 0 && nap <= 30 && hrMennyiseg < 1001)
+    {
+        unsigned int count[6] = {0};
+        int max = 0;
+
+        for (int i=0; i<hrMennyiseg; i++)
+            if (h->rendeles[i]->nap == nap)
+                for (int j=0; j<6; j++)
+                    count[ h->rendeles[i]->pizza[j].fajta - 'A' ] += h->rendeles[i]->pizza[j].db;
+
+        max = 0;
+        for (int i=1; i<6; i++)
+            if (count[i] > count[max])
+                max = i;
+        if (count[max] == 0)
+            return 'X';
+
+        /*
+        for (int i=0; i<5; i++)
+            for (int j=i+1; j<6; j++)
+                if (count[i] == count[j])
+                    return 'Y';
+                    */
+        for (int i=0; i<6; i++)
+            if (count[i] == count[max] && i != max)
+                return 'Y';
+
+        return 'A' + max;
+    }
+
+    return 'X';
 }
