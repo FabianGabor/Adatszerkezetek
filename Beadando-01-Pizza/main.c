@@ -82,7 +82,7 @@ int main()
 
 pizza uj_pizza(int db, char fajta)
 {
-    if (db<=9 && (fajta >= 'A' && fajta <= 'F'))
+    if (db > 0 && db <= 9 && fajta >= 'A' && fajta <= 'F')
     {
         pizza p = malloc(sizeof (pizza));
         p->db = db;
@@ -102,15 +102,20 @@ void pizza_torol(pizza p)
 
 rendeles uj_rendeles(int futar, int nap, pizza p)
 {
-    rendeles r = malloc(sizeof (rendeles));
-    r->pizza = malloc(sizeof (pizza) * 6);
+    if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
+    {
+        rendeles r = malloc(sizeof (rendeles));
+        r->pizza = malloc(sizeof (pizza) * 6);
 
-    r->futar = futar;
-    r->nap = nap;
+        r->futar = futar;
+        r->nap = nap;
 
-    r->pizza[p->fajta - 'A'] = *p;
+        r->pizza[p->fajta - 'A'] = *p;
 
-    return r;
+        return r;
+    }
+    else
+        return NULL;
 }
 
 void rendeles_torol(rendeles r)
