@@ -82,11 +82,15 @@ int main()
 
 pizza uj_pizza(int db, char fajta)
 {
-    pizza p = malloc(sizeof (pizza));
-    p->db = db;
-    p->fajta = fajta;
-
-    return p;
+    if (db<=9 && (fajta >= 'A' && fajta <= 'F'))
+    {
+        pizza p = malloc(sizeof (pizza));
+        p->db = db;
+        p->fajta = fajta;
+        return p;
+    }
+    else
+        return NULL;
 }
 
 void pizza_torol(pizza p)
