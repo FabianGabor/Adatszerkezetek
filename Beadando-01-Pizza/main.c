@@ -163,9 +163,6 @@ void kiir(havirendeles h)
         printf("\tNap: %d \n", h->rendeles[i]->nap);
         printf("\tFutar: %d \n", h->rendeles[i]->futar);
 
-        //int rendeles_mennyiseg = (int) (sizeof(*h.rendeles[0].pizza) );
-        //printf("\tsizeof(rendeles_mennyiseg): %d\n", rendeles_mennyiseg);
-
         for (int j=0; j < 6; j++)
             //if (h->rendeles[i]->pizza[j]->db > 0)
             if (h->rendeles[i]->pizza[j].db > 0)
