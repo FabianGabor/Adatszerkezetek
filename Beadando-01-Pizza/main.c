@@ -62,47 +62,26 @@ int main()
     r = uj_rendeles(2, 2, p);
     plusz_rendeles(h, r);
 
-    p = uj_pizza(3, 'C');
-    r = uj_rendeles(3, 3, p);
+
+    p = uj_pizza(0, 'G');
+    r = uj_rendeles(2, 2, p);
+    p = uj_pizza(0, 'G');
+    plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    p = uj_pizza(4, 'D');
-    r = uj_rendeles(3, 3, p);
-    p = uj_pizza(5, 'E');
+    p = uj_pizza(0, 'A');
+    r = uj_rendeles(2, 2, p);
+    p = uj_pizza(0, 'G');
     plusz_pizza(r,p);
-    p = uj_pizza(3, 'F');
-    plusz_pizza(r,p);
-
-    p = uj_pizza(1, 'F');
-    plusz_pizza(r,p);
-
     plusz_rendeles(h, r);
 
-    //kiir(h);
-
-    //printf("3. napi max pizza tipus: %c\n", napi_max(h,3));
-
-    //randomRendelesek(h,r,p,10);
-
-
-
-    srand(time(NULL));
-    for (int i=h->mennyiseg; i<10; i++)
-    {
-        p = uj_pizza( rand() % 8 + 1, 'A' + (rand() % 6) );
-        r = uj_rendeles( rand() % 8 + 1, rand() % 29 + 1, p );
-
-        for (int j=0; j< rand() % 6; j++)
-        {
-            p = uj_pizza( rand() % 8 + 1, 'A' + (rand() % 6) );
-            plusz_pizza(r,p);
-        }
-
-        plusz_rendeles(h,r);
-    }
-
+    randomRendelesek(h,r,p,25);
 
     kiir(h);
+
+    int nap = 3;
+    printf("%d. napi max pizza tipus: %c\n", nap, napi_max(h,nap));
+    printf("%d. napi kiszallitott pizzak szama: %d\n", nap, napi_ossz(h, nap));
 
     pizza_torol(p);
     rendeles_torol(r);
@@ -113,10 +92,18 @@ int main()
 
 void randomRendelesek(havirendeles h, rendeles r, pizza p, int n)
 {
+    srand(time(NULL));
     for (int i=h->mennyiseg; i<n; i++)
     {
-        p = uj_pizza( rand() % 9, 'A' + (rand() % 6) );
-        r = uj_rendeles( rand() % 9, rand() % 30, p );
+        p = uj_pizza( rand() % 8 + 1, 'A' + rand() % 5);
+        r = uj_rendeles( rand() % 8 + 1, rand() % 29 + 1, p );
+
+        for (int j=0; j< rand() % 6; j++)
+        {
+            p = uj_pizza( rand() % 8 + 1, 'A' + rand() % 5 ); // i=8 eseten db = i%8=0, ami miatt uj_pizza = NULL
+            plusz_pizza(r,p);
+        }
+
         plusz_rendeles(h,r);
     }
 }
@@ -147,20 +134,26 @@ void pizza_torol(pizza p)
 
 rendeles uj_rendeles(int futar, int nap, pizza p)
 {
-    if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
+    if (p) // p NULL check
     {
-        rendeles r = malloc(sizeof (r));
-        r->pizza = malloc(sizeof (p) * 6);
+        if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
+        {
+            //rendeles r = malloc(sizeof (r));
+            //r->pizza = malloc(sizeof (p) * 6);
+            rendeles r = calloc(1,sizeof(r));
+            r->pizza = calloc(6,sizeof(p));
 
-        r->futar = futar;
-        r->nap = nap;
+            r->futar = futar;
+            r->nap = nap;
 
-        r->pizza[p->fajta - 'A'] = *p;
+            r->pizza[p->fajta - 'A'] = *p;
 
-        return r;
+            return r;
+        }
+        else
+            return NULL;
     }
-    else
-        return NULL;
+    return NULL;
 }
 
 void rendeles_torol(rendeles r)
@@ -177,13 +170,17 @@ void rendeles_torol(rendeles r)
 
 havirendeles uj_havirendeles(rendeles r)
 {
-    havirendeles h = malloc(sizeof(havirendeles));
-    h->rendeles = malloc(sizeof(rendeles));
+    if (r) // r NULL check
+    {
+        havirendeles h = malloc(sizeof(h));
+        h->rendeles = malloc(sizeof(r));
 
-    h->rendeles[hrMennyiseg++] = r;
-    h->mennyiseg++;
+        h->rendeles[hrMennyiseg++] = r;
+        h->mennyiseg++;
 
-    return h;
+        return h;
+    }
+    return NULL;
 }
 
 void havirendeles_torol(havirendeles h)
@@ -212,15 +209,16 @@ void kiir(havirendeles h)
 
 void plusz_rendeles(havirendeles h, rendeles r) // 9
 {
-    if (h->mennyiseg < 1000)
+    if (h->mennyiseg < 1000 && r)
     {
         TRY
         {
-            havirendeles temp = NULL;
+            rendeles *temp = NULL;
             //h = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg));
             //temp = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg)); // h-t nem irom felul, ha nem sikerul lefoglalni a memoriat
             //temp = (havirendeles ) realloc(h, sizeof(h) + sizeof(h->rendeles[0]) * 2 );
-            temp = (havirendeles ) realloc(h, sizeof(h) + sizeof(r) * 2 );
+            //temp = (havirendeles ) realloc(h, sizeof(h) + sizeof(r) * 2 );
+            temp = (rendeles *) realloc(h->rendeles, sizeof(r) * (h->mennyiseg + 1) );
 
             if (temp == NULL)
             {
@@ -228,7 +226,7 @@ void plusz_rendeles(havirendeles h, rendeles r) // 9
                 exit(1);
             }
             else
-                h = temp;
+                h->rendeles = temp;
 
             h->rendeles[h->mennyiseg++] = r;
             //THROW;
@@ -238,18 +236,19 @@ void plusz_rendeles(havirendeles h, rendeles r) // 9
             printf("Got Exception!\n");
         }
         ETRY;
-
-
     }
 }
 
 
 void plusz_pizza(rendeles r, pizza p)  // 10
 {
-    if (r->pizza[p->fajta - 'A'].db + p->db <= 9)
+    if (p && r)
     {
-        r->pizza[p->fajta - 'A'].db += p->db;
-        r->pizza[p->fajta - 'A'].fajta = p->fajta;
+        if (r->pizza[p->fajta - 'A'].db + p->db <= 9)
+        {
+            r->pizza[p->fajta - 'A'].db += p->db;
+            r->pizza[p->fajta - 'A'].fajta = p->fajta;
+        }
     }
 }
 
