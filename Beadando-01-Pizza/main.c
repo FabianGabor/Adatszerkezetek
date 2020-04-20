@@ -39,6 +39,7 @@ void pizza_torol(pizza p);
 char napi_max(havirendeles h, int nap); // 4
 int napi_ossz(havirendeles h, int nap); // 5
 void kiir(havirendeles h); // 6
+void kiir_havirendelesek(havirendeles h); // 6
 int havi_min_nap(havirendeles h); // 7
 char havi_max_pizza(havirendeles h); // 8
 void plusz_rendeles(havirendeles h, rendeles r); // 9
@@ -75,8 +76,9 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,25);
+    randomRendelesek(h,r,p,3);
 
+    kiir_havirendelesek(h);
     kiir(h);
 
     int nap = 3;
@@ -193,7 +195,7 @@ void havirendeles_torol(havirendeles h)
 }
 
 
-void kiir(havirendeles h)
+void kiir_havirendelesek(havirendeles h)
 {
     for (int i=0; i< h->mennyiseg; i++) {
         printf("Rendeles: %d.\n", i+1);
@@ -204,6 +206,43 @@ void kiir(havirendeles h)
             if (h->rendeles[i]->pizza[j].db > 0)
                 printf("\t\tPizza: %d %c \n", h->rendeles[i]->pizza[j].db, h->rendeles[i]->pizza[j].fajta);
     }
+    printf("\n");
+}
+
+void kiir(havirendeles h) // 6
+{
+    typedef int rendeles;
+    typedef struct futar {
+        rendeles rendelesek[6];
+    } futar;
+
+    typedef struct nap {
+        futar futar[9];
+    } nap;
+
+    nap napok[30] =  {0};
+
+
+    for (int i=0; i< h->mennyiseg; i++)
+    {
+        for (int j=0; j<6; j++)
+            napok[h->rendeles[i]->nap].futar[h->rendeles[i]->futar - 1].rendelesek[j] += h->rendeles[i]->pizza[j].db;
+    }
+
+    for (int i=0; i<2; i++)
+    {
+        printf("%d. nap\n", i+1);
+        for (int j=0; j<9; j++)
+        {
+            printf("\t%d. futar: ", j+1);
+            for (int k=0; k<6; k++)
+                printf("%c=%d ", 'A'+k, napok[i].futar[j].rendelesek[k]);
+            printf("\n");
+        }
+        printf("\n");
+    }
+
+
     printf("\n");
 }
 
