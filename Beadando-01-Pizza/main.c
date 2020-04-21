@@ -77,7 +77,7 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,5);
+    randomRendelesek(h,r,p,50);
 
     kiir_havirendelesek(h);
     kiir(h);
@@ -116,7 +116,9 @@ pizza uj_pizza(int db, char fajta)
 {
     if (db > 0 && db <= 9 && fajta >= 'A' && fajta <= 'F')
     {
-        pizza p = malloc(sizeof (p));
+        //pizza p = malloc(sizeof (p));
+        pizza p = malloc(sizeof (*p));
+
         p->db = db;
         p->fajta = fajta;
         return p;
@@ -140,11 +142,14 @@ rendeles uj_rendeles(int futar, int nap, pizza p)
     if (p) // p NULL check
     {
         if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
-        {
-            //rendeles r = malloc(sizeof (r));
-            //r->pizza = malloc(sizeof (p) * 6);
-            rendeles r = calloc(1,sizeof(r));
+        {            
+            rendeles r = malloc(sizeof (*r));
+            //rendeles r = calloc(1,sizeof(r));
+            //rendeles r = calloc(1,sizeof(*r));
+
+            //r->pizza = malloc(sizeof (*p) * 6);
             r->pizza = calloc(6,sizeof(p));
+            r->pizza = calloc(6,sizeof(*p));
 
             r->futar = futar;
             r->nap = nap;
@@ -175,8 +180,11 @@ havirendeles uj_havirendeles(rendeles r)
 {
     if (r) // r NULL check
     {
-        havirendeles h = malloc(sizeof(h));
-        h->rendeles = malloc(sizeof(r));
+        //havirendeles h = malloc(sizeof(h));
+        havirendeles h = malloc(sizeof(*h));
+
+        //h->rendeles = malloc(sizeof(r));
+        h->rendeles = malloc(sizeof(*r));
 
         h->rendeles[hrMennyiseg++] = r;
         h->mennyiseg++;
@@ -256,6 +264,20 @@ void kiir_tomb(havirendeles h) // 6
         }
     }
     printf("\n");
+}
+
+void kiir(havirendeles h) // 6
+{
+    typedef int rendeles;
+    typedef struct futar {
+        rendeles rendelesek[6];
+        int van;
+    } futar;
+
+    typedef struct nap {
+        futar futar[9];
+        int van;
+    } nap;
 }
 
 void plusz_rendeles(havirendeles h, rendeles r) // 9
