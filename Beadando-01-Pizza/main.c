@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include <setjmp.h>
 
@@ -25,6 +26,24 @@ typedef struct havirendeles {
     int mennyiseg;
 } *havirendeles;
 
+
+typedef struct futar {
+    int pizzaTipusokSzama;
+    int futar;
+    pizza pizza;
+} *futar;
+
+typedef struct nap {
+    int napSorszam;
+    int futarokSzama;
+    futar *futarok;
+} *nap;
+
+typedef struct napok {
+    int napokSzama;
+    nap *nap;
+} napok;
+
 int hrMennyiseg = 0;
 
 
@@ -39,7 +58,6 @@ void pizza_torol(pizza p);
 char napi_max(havirendeles h, int nap); // 4
 int napi_ossz(havirendeles h, int nap); // 5
 void kiir(havirendeles h); // 6
-void kiir_tomb(havirendeles h); // 6
 void kiir_havirendelesek(havirendeles h); // 6
 int havi_min_nap(havirendeles h); // 7
 char havi_max_pizza(havirendeles h); // 8
@@ -47,12 +65,15 @@ void plusz_rendeles(havirendeles h, rendeles r); // 9
 void plusz_pizza(rendeles r, pizza p); // 10
 
 void randomRendelesek(havirendeles h, rendeles r, pizza p, int n);
+int benneNap (nap nap, int napokSzama, int keresettNap);
 
 int main()
 {
     pizza p;
     rendeles r;
     havirendeles h;
+
+    //kiir(h);
 
     p = uj_pizza(1, 'A');
     r = uj_rendeles(1, 1, p);
@@ -61,7 +82,7 @@ int main()
     //kiir(h);
 
     p = uj_pizza(2, 'B');
-    r = uj_rendeles(2, 2, p);
+    r = uj_rendeles(1, 2, p);
     plusz_rendeles(h, r);
 
 
@@ -77,7 +98,7 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,50);
+    randomRendelesek(h,r,p,2);
 
     kiir_havirendelesek(h);
     kiir(h);
@@ -85,6 +106,8 @@ int main()
     int nap = 3;
     printf("%d. napi max pizza tipus: %c\n", nap, napi_max(h,nap));
     printf("%d. napi kiszallitott pizzak szama: %d\n", nap, napi_ossz(h, nap));
+
+    printf("A hónap leggyengébb forgalmú napja: %d \n", havi_min_nap(h));
 
     pizza_torol(p);
     rendeles_torol(r);
@@ -143,9 +166,9 @@ rendeles uj_rendeles(int futar, int nap, pizza p)
     {
         if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
         {            
-            rendeles r = malloc(sizeof (*r));
+            //rendeles r = malloc(sizeof (*r));
             //rendeles r = calloc(1,sizeof(r));
-            //rendeles r = calloc(1,sizeof(*r));
+            rendeles r = calloc(1,sizeof(*r));
 
             //r->pizza = malloc(sizeof (*p) * 6);
             r->pizza = calloc(6,sizeof(p));
@@ -218,7 +241,7 @@ void kiir_havirendelesek(havirendeles h)
     printf("\n");
 }
 
-void kiir_tomb(havirendeles h) // 6
+void kiir(havirendeles h) // 6
 {
     typedef int rendeles;
     typedef struct futar {
@@ -266,19 +289,6 @@ void kiir_tomb(havirendeles h) // 6
     printf("\n");
 }
 
-void kiir(havirendeles h) // 6
-{
-    typedef int rendeles;
-    typedef struct futar {
-        rendeles rendelesek[6];
-        int van;
-    } futar;
-
-    typedef struct nap {
-        futar futar[9];
-        int van;
-    } nap;
-}
 
 void plusz_rendeles(havirendeles h, rendeles r) // 9
 {
@@ -287,11 +297,8 @@ void plusz_rendeles(havirendeles h, rendeles r) // 9
         TRY
         {
             rendeles *temp = NULL;
-            //h = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg));
-            //temp = (havirendeles ) realloc(h, sizeof(havirendeles) * (hrMennyiseg)); // h-t nem irom felul, ha nem sikerul lefoglalni a memoriat
-            //temp = (havirendeles ) realloc(h, sizeof(h) + sizeof(h->rendeles[0]) * 2 );
-            //temp = (havirendeles ) realloc(h, sizeof(h) + sizeof(r) * 2 );
-            temp = (rendeles *) realloc(h->rendeles, sizeof(r) * (h->mennyiseg + 1) );
+            //temp = (rendeles *) realloc(h->rendeles, sizeof(r) * (h->mennyiseg + 1) );
+            temp = (rendeles *) realloc(h->rendeles, sizeof(*r) * (h->mennyiseg + 1) );
 
             if (temp == NULL)
             {
@@ -337,7 +344,6 @@ char napi_max(havirendeles h, int nap) // 4
                 for (int j=0; j<6; j++)
                     count[ h->rendeles[i]->pizza[j].fajta - 'A' ] += h->rendeles[i]->pizza[j].db;
 
-        max = 0;
         for (int i=1; i<6; i++)
             if (count[i] > count[max])
                 max = i;
@@ -363,4 +369,31 @@ int napi_ossz(havirendeles h, int nap) // 5
             for (int j=0; j<6; j++)
                 count += h->rendeles[i]->pizza[j].db;
     return count;
+}
+
+int havi_min_nap(havirendeles h) // 7
+{
+    if (h->mennyiseg < 1001)
+    {
+        unsigned int count[30] = {0};
+        int min = 0;
+
+        for (int i=0; i< h->mennyiseg; i++)
+            for (int j=0; j<6; j++)
+                count[ h->rendeles[i]->nap - 1 ] += h->rendeles[i]->pizza[j].db;
+
+
+        for (int i=1; i<30; i++)
+            if (count[i] < count[min])
+                min = i;
+
+
+        for (int i=0; i<30; i++)
+            if (count[i] == count[min] && i != min) // tobb minimum, es nem onmagaval egyenlo
+                return -1;
+
+        return (count[min] == 0) ? 0 : min + 1;
+    }
+
+    return 0;
 }
