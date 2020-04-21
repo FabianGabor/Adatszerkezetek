@@ -98,7 +98,7 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,2);
+    randomRendelesek(h,r,p,1000);
 
     kiir_havirendelesek(h);
     kiir(h);
@@ -121,12 +121,12 @@ void randomRendelesek(havirendeles h, rendeles r, pizza p, int n)
     srand(time(NULL));
     for (int i=h->mennyiseg; i<n; i++)
     {
-        p = uj_pizza( rand() % 8 + 1, 'A' + rand() % 5);
-        r = uj_rendeles( rand() % 8 + 1, rand() % 29 + 1, p );
+        p = uj_pizza( rand() % 9 + 1, 'A' + rand() % 6);
+        r = uj_rendeles( rand() % 8 + 1, rand() % 30 + 1, p );
 
         for (int j=0; j< rand() % 6; j++)
         {
-            p = uj_pizza( rand() % 8 + 1, 'A' + rand() % 5 ); // i=8 eseten db = i%8=0, ami miatt uj_pizza = NULL
+            p = uj_pizza( rand() % 8 + 1, 'A' + rand() % 6 ); // i=8 eseten db = i%8=0, ami miatt uj_pizza = NULL
             plusz_pizza(r,p);
         }
 
