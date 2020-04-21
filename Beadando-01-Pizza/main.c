@@ -39,6 +39,7 @@ void pizza_torol(pizza p);
 char napi_max(havirendeles h, int nap); // 4
 int napi_ossz(havirendeles h, int nap); // 5
 void kiir(havirendeles h); // 6
+void kiir_tomb(havirendeles h); // 6
 void kiir_havirendelesek(havirendeles h); // 6
 int havi_min_nap(havirendeles h); // 7
 char havi_max_pizza(havirendeles h); // 8
@@ -126,7 +127,7 @@ pizza uj_pizza(int db, char fajta)
 
 void pizza_torol(pizza p)
 {
-    if (p->fajta != '\0')
+    if (!p || p->fajta != '\0')
     {
         free(p);
         p = NULL;
@@ -209,7 +210,7 @@ void kiir_havirendelesek(havirendeles h)
     printf("\n");
 }
 
-void kiir(havirendeles h) // 6
+void kiir_tomb(havirendeles h) // 6
 {
     typedef int rendeles;
     typedef struct futar {
@@ -223,7 +224,6 @@ void kiir(havirendeles h) // 6
     } nap;
 
     nap napok[30] =  {0};
-
 
     for (int i=0; i< h->mennyiseg; i++)
     {
@@ -255,8 +255,6 @@ void kiir(havirendeles h) // 6
             printf("\n");
         }
     }
-
-
     printf("\n");
 }
 
