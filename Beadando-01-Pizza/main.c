@@ -76,7 +76,7 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,3);
+    randomRendelesek(h,r,p,5);
 
     kiir_havirendelesek(h);
     kiir(h);
@@ -214,10 +214,12 @@ void kiir(havirendeles h) // 6
     typedef int rendeles;
     typedef struct futar {
         rendeles rendelesek[6];
+        int van;
     } futar;
 
     typedef struct nap {
         futar futar[9];
+        int van;
     } nap;
 
     nap napok[30] =  {0};
@@ -226,20 +228,32 @@ void kiir(havirendeles h) // 6
     for (int i=0; i< h->mennyiseg; i++)
     {
         for (int j=0; j<6; j++)
-            napok[h->rendeles[i]->nap].futar[h->rendeles[i]->futar - 1].rendelesek[j] += h->rendeles[i]->pizza[j].db;
+            if (h->rendeles[i]->pizza[j].db)
+            {
+                napok[h->rendeles[i]->nap - 1].futar[h->rendeles[i]->futar - 1].rendelesek[j] += h->rendeles[i]->pizza[j].db;
+                napok[h->rendeles[i]->nap - 1].van++;
+                napok[h->rendeles[i]->nap - 1].futar[h->rendeles[i]->futar - 1].van++;
+            }
     }
 
-    for (int i=0; i<2; i++)
+    for (int i=0; i<30; i++)
     {
-        printf("%d. nap\n", i+1);
-        for (int j=0; j<9; j++)
+        if (napok[i].van)
         {
-            printf("\t%d. futar: ", j+1);
-            for (int k=0; k<6; k++)
-                printf("%c=%d ", 'A'+k, napok[i].futar[j].rendelesek[k]);
+            printf("%d. nap\n", i+1);
+            for (int j=0; j<9; j++)
+            {
+                if (napok[i].futar[j].van)
+                {
+                    printf("\t%d. futar: ", j+1);
+                    for (int k=0; k<6; k++)
+                        if (napok[i].futar[j].rendelesek[k])
+                            printf("%c=%d ", 'A'+k, napok[i].futar[j].rendelesek[k]);
+                    printf("\n");
+                }
+            }
             printf("\n");
         }
-        printf("\n");
     }
 
 
