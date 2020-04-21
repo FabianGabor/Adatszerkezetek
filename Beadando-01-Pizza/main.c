@@ -85,6 +85,14 @@ int main()
     r = uj_rendeles(1, 2, p);
     plusz_rendeles(h, r);
 
+    p = uj_pizza(5, 'C');
+    r = uj_rendeles(1, 2, p);
+    plusz_rendeles(h, r);
+
+    p = uj_pizza(3, 'B');
+    r = uj_rendeles(2, 3, p);
+    plusz_rendeles(h, r);
+
 
     p = uj_pizza(0, 'G');
     r = uj_rendeles(2, 2, p);
@@ -98,16 +106,17 @@ int main()
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
 
-    randomRendelesek(h,r,p,1000);
+    randomRendelesek(h,r,p,3);
 
     kiir_havirendelesek(h);
     kiir(h);
 
-    int nap = 3;
+    int nap = 2;
     printf("%d. napi max pizza tipus: %c\n", nap, napi_max(h,nap));
     printf("%d. napi kiszallitott pizzak szama: %d\n", nap, napi_ossz(h, nap));
 
     printf("A hónap leggyengébb forgalmú napja: %d \n", havi_min_nap(h));
+    printf("A honap legkelendobb pizzaja: %c\n", havi_max_pizza(h));
 
     pizza_torol(p);
     rendeles_torol(r);
@@ -396,4 +405,31 @@ int havi_min_nap(havirendeles h) // 7
     }
 
     return 0;
+}
+
+char havi_max_pizza(havirendeles h) // 8
+{
+    if (h->mennyiseg < 1001)
+    {
+        unsigned int count[6] = {0};
+        int max = 0;
+
+        for (int i=0; i< h->mennyiseg; i++)
+            for (int j=0; j<6; j++)
+                count[ h->rendeles[i]->pizza[j].fajta - 'A' ] += h->rendeles[i]->pizza[j].db;
+
+        for (int i=1; i<6; i++)
+            if (count[i] > count[max])
+                max = i;
+        if (count[max] == 0)
+            return 'X';
+
+        for (int i=0; i<6; i++)
+            if (count[i] == count[max] && i != max)
+                return 'Y';
+
+        return 'A' + max;
+    }
+
+    return 'X';
 }
