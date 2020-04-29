@@ -3,6 +3,14 @@
 #include <string.h>
 #include <strings.h>
 
+/*
+Személyek adatait tartjuk nyilván: név (max. 29 karakter, szóközt is tartalmazhat), születési év, hónap, nap.
+Maximum 10 személy adatait kell tárolnunk. Írja meg a lista, szemely , ev, ho, nap, szuldatum, nev típusokat,
+ahol a lista tartalmazza a személyeket, melyek tartalmazzák a nevet és a szuldatumot, ahol utóbbi tartalmazza az
+év, ho, nap típusokat. Írja meg a lista letrehoz(char * allomanynev) függvényt, mely a megadott állományból
+képes feltölteni a listát. Az állomány soronként egy személy adatait tartalmazza a következőképpen:
+*/
+
 typedef unsigned int ev;
 typedef unsigned int ho;
 typedef unsigned int nap;
@@ -59,14 +67,6 @@ lista letrehoz(char * allomanynev)
             ptr = strtok(str, delim);
             while(ptr != NULL)
             {
-                /*
-                if (atoi(ptr) >0)
-                    data_tmp[i] = atoi(ptr);
-                else
-                    data_tmp[i] = (*ptr - 'A');
-
-                ptr = strtok(NULL, delim);
-                */
                 szemelyek[i].szulDatum.ev = atoi(ptr);
                 ptr = strtok(NULL, delim);
                 szemelyek[i].szulDatum.ho = atoi(ptr);
@@ -75,6 +75,11 @@ lista letrehoz(char * allomanynev)
 
                 char delim[] = "\0"; // innentol a vegeig, ujradeklaralva, hogy while cikluson kivul alljon vissza " "-re
                 ptr = strtok(NULL, delim);
+
+                while (ptr[strlen(ptr)-1] == '\r' || ptr[strlen(ptr)-1] == '\n') // Unix/Linux eseten '\n' a sorveg, Win eseten '\r\n', Mac eseten '\r'
+                    ptr[strlen(ptr)-1] = 0;
+
+
                 strcpy(szemelyek[i].nev, ptr);
 
                 printf("%s %d %d %d \n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
@@ -87,6 +92,8 @@ lista letrehoz(char * allomanynev)
 
     return NULL;
 }
+//rendezesimezo értéke a következők egyike lehet: "szuldatum", "nev", ha az irany 1, akkor novekvobe, ha nulla, akkor pedig csökkenőbe rendez.
+lista rendez(char * rendezesimezo, int irany);
 
 int main()
 {
