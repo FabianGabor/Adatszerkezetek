@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
 /*
 Személyek adatait tartjuk nyilván: név (max. 29 karakter, szóközt is tartalmazhat), születési év, hónap, nap.
@@ -11,6 +10,7 @@ ahol a lista tartalmazza a személyeket, melyek tartalmazzák a nevet és a szul
 képes feltölteni a listát. Az állomány soronként egy személy adatait tartalmazza a következőképpen:
 */
 
+typedef char nev[30];
 typedef unsigned int ev;
 typedef unsigned int ho;
 typedef unsigned int nap;
@@ -22,7 +22,7 @@ typedef struct szulDatum {
 } szuldatum;
 
 typedef struct szemely {
-    char nev[30];
+    nev nev;
     szuldatum szulDatum;
 } szemely;
 
@@ -54,14 +54,13 @@ lista letrehoz(char * allomanynev)
     char delim[] = " ";
     char *ptr;
 
-    lista szemelyek = malloc(sizeof(szemelyek) * 10);
+    lista szemelyek = malloc(sizeof(*szemelyek) * 10);
 
     if (file == NULL) perror ("Fajl nyitasi hiba");
     else
     {
         while( fgets(str, 9999, file) != NULL )
         {
-            i=0;
             ptr = strtok(str, delim);
             while(ptr != NULL)
             {
@@ -79,23 +78,39 @@ lista letrehoz(char * allomanynev)
 
                 strcpy(szemelyek[i].nev, ptr);
 
-                printf("%s %d %d %d \n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
-                i++;
+                //printf("%s %d %d %d \n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
                 ptr = NULL;
             }
+            i++;
         }
         fclose (file);
     }
 
-    return NULL;
+    return szemelyek;
 }
 //rendezesimezo értéke a következők egyike lehet: "szuldatum", "nev", ha az irany 1, akkor novekvobe, ha nulla, akkor pedig csökkenőbe rendez.
-lista rendez(char * rendezesimezo, int irany);
+//lista rendez(char * rendezesimezo, int irany);
+lista rendez(lista szemelyek, char * rendezesimezo, int irany);
+
+
+void kiir(lista szemelyek)
+{
+    for (unsigned int i=0; i<5; i++)
+        printf("%s \t%d.%d.%d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
+}
+
+
 
 int main()
 {
-    lista szemelyek;
+    lista szemelyek = malloc(sizeof (*szemelyek) * 10);
     szemelyek = letrehoz("in.txt");
+    szemelyek = rendez(szemelyek, "nev", 1);
+    kiir(szemelyek);
 
     return 0;
+}
+
+lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
+    return szemelyek;
 }
