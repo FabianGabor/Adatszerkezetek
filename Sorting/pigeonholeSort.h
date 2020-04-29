@@ -13,7 +13,7 @@ void pigeonHoleSort (int arr[], int length, const int max_num)
     int i;
     int range;
 
-    // Get the min_element and max_element from the given array
+    // legkisebb es legnagyobb elemek
     for (i = 0; i < length; i ++)
     {
         if (arr[i] < min_element)
@@ -23,19 +23,19 @@ void pigeonHoleSort (int arr[], int length, const int max_num)
             max_element = arr[i];
     }
 
-    // Get the range
+    // tartomany
     range = ( max_element - min_element ) + 1;
 
-    // Initialize the pigeonHoleArray with zero
+    // nullazas
     for ( i = 0; i < range; i++)
         pigeonHoleArray [i] = 0;
 
 
-    // place the elements in pigeonHoleArray
+    // elemek behelyezese
     for ( i = 0; i < length; i++, temp_array++)
         pigeonHoleArray [ *temp_array - min_element ] += 1;
 
-    // copy from pigeonHoleArray to original array
+    // eredeti tombbe visszamasolas
     for (i = 0, temp_array = &arr[0]; i < range; i++)
         while (pigeonHoleArray[i] > 0)
         {
