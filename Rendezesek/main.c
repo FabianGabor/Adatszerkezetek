@@ -77,7 +77,7 @@ lista letrehoz(char * allomanynev)
                 ptr = strtok(NULL, delim);
                 strcpy(szemelyek[i].nev, ptr);
 
-                printf("%s", szemelyek[i].nev);
+                printf("%s %d %d %d \n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
                 i++;
                 ptr = NULL;
             }
