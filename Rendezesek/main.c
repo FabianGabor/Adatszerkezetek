@@ -61,8 +61,6 @@ lista letrehoz(char * allomanynev)
     {
         while( fgets(str, 9999, file) != NULL )
         {
-            //printf("%s\n", str);
-
             i=0;
             ptr = strtok(str, delim);
             while(ptr != NULL)
@@ -78,7 +76,6 @@ lista letrehoz(char * allomanynev)
 
                 while (ptr[strlen(ptr)-1] == '\r' || ptr[strlen(ptr)-1] == '\n') // Unix/Linux eseten '\n' a sorveg, Win eseten '\r\n', Mac eseten '\r'
                     ptr[strlen(ptr)-1] = 0;
-
 
                 strcpy(szemelyek[i].nev, ptr);
 
