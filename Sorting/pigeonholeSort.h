@@ -1,36 +1,6 @@
 #ifndef PIGEONHOLESORT_H
 #define PIGEONHOLESORT_H
 
-void pigeonholeSort(int *array, int n)
-{
-    int *arr;
-    arr = array;
-
-    int min = arr[0];
-    int max = arr[0];
-    int range, i, j, index = 0;
-
-    for (int a=0; a<n; a++)
-    {
-        if (arr[a] > max)
-            max = arr[a];
-        if (arr[a] < min)
-            min = arr[a];
-    }
-
-    range = max - min + 1;
-    int phole[range];
-
-    for (i = 0; i<range; i++)
-        phole[i] = 0;
-
-    for (i = 0; i<range; i++)
-        phole[arr[i] - min]++;
-
-    for (j=0; j<range; j++)
-        while(phole[j]-- > 0)
-            arr[index++] = j + min;
-}
 
 void pigeonHoleSort (int arr[], int length, const int max_num)
 {
