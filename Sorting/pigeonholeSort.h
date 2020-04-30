@@ -1,10 +1,12 @@
 #ifndef PIGEONHOLESORT_H
 #define PIGEONHOLESORT_H
 
+#include <stdlib.h>
 
 void pigeonHoleSort (int arr[], int length, const int max_num)
 {
-    int pigeonHoleArray[ max_num ];
+    //int pigeonHoleArray[ max_num ];
+    int *pigeonHoleArray = malloc(sizeof(arr[0]) * max_num);
     int *temp_array = arr;
 
     int max_element = 0;
