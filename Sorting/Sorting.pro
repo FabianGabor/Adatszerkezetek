@@ -7,4 +7,7 @@ SOURCES += \
         main.c
 
 HEADERS += \
-    pigeonholeSort.h
+    MSDsort.h \
+    pigeonholeSort.h \
+    quicksort.h \
+    timsort.h
