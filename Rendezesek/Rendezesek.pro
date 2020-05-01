@@ -5,3 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         main.c
+
+HEADERS += \
+    ThreeWayRadixQSort.h \
+    TimSort.h
