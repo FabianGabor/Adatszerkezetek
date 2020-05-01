@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ThreeWayRadixQSort.h>
+
+#define MAX_SZEMELYEK 10
 
 /*
 Személyek adatait tartjuk nyilván: név (max. 29 karakter, szóközt is tartalmazhat), születési év, hónap, nap.
@@ -29,81 +32,15 @@ typedef struct szemely {
 typedef szemely *lista;
 typedef char allomanynev[30];
 
-void beilleszteses(int *t, int n)
-{
-    int i, j, cs;
-    for (i = 1; i < n; i++) {
-        cs = t[i];
-        j = i - 1;
-        while (j >= 0 && t[j] > cs) {
-            t[j + 1] = t[j];
-            j--;
-        }
-        t[j + 1] = cs;
-    }
-}
-
-
-lista letrehoz(char * allomanynev)
-{
-    FILE *file;
-    file = fopen(allomanynev, "r");
-
-    char str[30];
-    int i=0;
-    char delim[] = " ";
-    char *ptr;
-
-    lista szemelyek = malloc(sizeof(*szemelyek) * 10);
-
-    if (file == NULL) perror ("Fajl nyitasi hiba");
-    else
-    {
-        while( fgets(str, 9999, file) != NULL )
-        {
-            ptr = strtok(str, delim);
-            while(ptr != NULL)
-            {
-                szemelyek[i].szulDatum.ev = atoi(ptr);
-                ptr = strtok(NULL, delim);
-                szemelyek[i].szulDatum.ho = atoi(ptr);
-                ptr = strtok(NULL, delim);
-                szemelyek[i].szulDatum.nap = atoi(ptr);
-
-                char delim[] = "\0"; // innentol a vegeig, ujradeklaralva, hogy while cikluson kivul alljon vissza " "-re
-                ptr = strtok(NULL, delim);
-
-                while (ptr[strlen(ptr)-1] == '\r' || ptr[strlen(ptr)-1] == '\n') // Unix/Linux eseten '\n' a sorveg, Win eseten '\r\n', Mac eseten '\r'
-                    ptr[strlen(ptr)-1] = 0;
-
-                strcpy(szemelyek[i].nev, ptr);
-
-                //printf("%s %d %d %d \n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
-                ptr = NULL;
-            }
-            i++;
-        }
-        fclose (file);
-    }
-
-    return szemelyek;
-}
+lista letrehoz(char * allomanynev);
 //rendezesimezo értéke a következők egyike lehet: "szuldatum", "nev", ha az irany 1, akkor novekvobe, ha nulla, akkor pedig csökkenőbe rendez.
-//lista rendez(char * rendezesimezo, int irany);
 lista rendez(lista szemelyek, char * rendezesimezo, int irany);
-
-
-void kiir(lista szemelyek)
-{
-    for (unsigned int i=0; i<5; i++)
-        printf("%s \t%d.%d.%d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
-}
-
+void kiir(lista szemelyek);
 
 
 int main()
 {
-    lista szemelyek = malloc(sizeof (*szemelyek) * 10);
+    lista szemelyek = malloc(sizeof (*szemelyek) * MAX_SZEMELYEK);
     szemelyek = letrehoz("in.txt");
     szemelyek = rendez(szemelyek, "nev", 1);
     kiir(szemelyek);
@@ -111,6 +48,54 @@ int main()
     return 0;
 }
 
-lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
+lista letrehoz(char * allomanynev)
+{
+    FILE *file;
+    file = fopen(allomanynev, "r");
+
+
+    char str[30];
+    char delim[] = " ";
+    char *ptr;
+
+    int i=0;
+
+    lista szemelyek = malloc(sizeof(*szemelyek) * MAX_SZEMELYEK);
+
+    if (file == NULL) perror ("Fajl nyitasi hiba");
+    else
+    {
+        //while( fgets(str, 9999, file) != NULL )
+        while (fscanf(file, "%ul", &szemelyek[i].szulDatum.ev) != EOF)
+        {
+            fscanf(file, "%ul", &szemelyek[i].szulDatum.ho);
+            fscanf(file, "%ul", &szemelyek[i].szulDatum.nap);
+            fscanf(file, "%s", NULL); // nap es nev kozotti szokoz
+            fgets(szemelyek[i].nev, sizeof (szemelyek[i].nev), file);
+            i++;
+        }
+        fclose (file);
+    }
     return szemelyek;
+}
+
+lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
+    irany = 0; // remove unused warning temporarily
+    if (strcmp(rendezesimezo, "nev") == 0)
+    {
+        printf("Nev szerinti rendezes\n");
+        //sortString();
+    }
+    else if (strcmp(rendezesimezo, "szuldatum") == 0)
+    {
+        printf("Szuletesi datum szerinti rendezes\n");
+    }
+
+    return szemelyek;
+}
+
+void kiir(lista szemelyek)
+{
+    for (unsigned int i=0; i<5; i++)
+        printf("%s \t%d.%d.%d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
 }
