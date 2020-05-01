@@ -13,7 +13,7 @@
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#define NUM_RUNS 1000
+#define NUM_RUNS 2000
 
 #define RANGE (int) pow('Z'-'A' + 'z' - 'a',3)
 #define N 1000
@@ -252,14 +252,19 @@ int main()
 
 
     const int rows = 1000;
-    StringArr str1 = malloc(rows * sizeof(char*));
-    StringArr str2 = malloc(rows * sizeof(char*));
+    StringArr str1 = malloc(sizeof(char*) * rows * 2);
+    StringArr str2 = malloc(sizeof(char*) * rows * 2);
+    StringArr str = malloc(sizeof(char*) * rows * 2);
 
+
+    /*
     for (int i = 0; i < rows; i++)
     {
         str1[i] = malloc(sizeof(char) * 500);
         str2[i] = malloc(sizeof(char) * 500);
     }
+    */
+
 
 
     FILE *f = fopen("MOCK_DATA.csv", "r");
@@ -269,44 +274,79 @@ int main()
 
 
 
-    for (unsigned int i=0; (read = getline(&line, &len, f)) != -1; i++)
+    for (int i=0; (read = getline(&line, &len, f)) != -1 && i < rows; i++)
     {
-        str1[i] = malloc(sizeof(char) * 500);
-        str2[i] = malloc(sizeof(char) * 500);
-        strcpy(str1[i], line);
-        strcpy(str2[i], line);
+        str1[i] = malloc(sizeof(char*) * 250);
+        str2[i] = malloc(sizeof(char*) * 250);
+        str[i] = malloc(sizeof(char*) * 250);
+        //strcpy(str1[i], line);
+        //strcpy(str2[i], line);
+        strcpy(str[i], line);
+    }
+    fclose(f);
+    if (line)
+    free(line);
+
+    f = fopen("MOCK_DATA2.csv", "r");
+    line = NULL;
+    len = 0;
+
+    for (int i=1000; (read = getline(&line, &len, f)) != -1 && i < rows * 2; i++)
+    {
+        str1[i] = malloc(sizeof(char*) * 250);
+        str2[i] = malloc(sizeof(char*) * 250);
+        str[i] = malloc(sizeof(char*) * 250);
+        //strcpy(str1[i], line);
+        //strcpy(str2[i], line);
+        strcpy(str[i], line);
     }
     fclose(f);
     if (line)
     free(line);
 
 
+    //memcpy(str1, str, sizeof(char*) * rows);
+    //memcpy(str2, str, sizeof(char*) * rows);
+    //for (int i=0; i<rows; i++)
+        //memcpy(str1[i], str[i], sizeof (*str[i]) * rows);
+
+
     /*
     for (int i = 0; i < rows; i++)
-        printf("%s", str[i]);
+        printf("%d. %s", i, str1[i]);
     printf("\n\n\n");
     */
 
 
+
+
     runtime = clock();
     // sort the strings
-    sortString1(str1);
+    for (int i=0; i<2000; i++)
+    {
+        memcpy(str1, str, sizeof(char*) * rows);
+        sortString1(str1);
+    }
     runtime = clock() - runtime;
     time_taken_strings = ((double)runtime)/CLOCKS_PER_SEC; // in seconds
     printf("%f seconds to sort %d strings.\n", time_taken_strings, rows);
 
 
-    /*
+/*
     for (int i = 0; i < rows; i++)
-        printf("%s", str[i]);
+        printf("%s", str1[i]);
     printf("\n");
-    */
+*/
 
 
 
     runtime = clock();
     // sort the strings
-    sortString2(str2);
+    for (int i=0; i<2000; i++)
+    {
+        memcpy(str2, str, sizeof(char*) * rows);
+        sortString2(str2);
+    }
     runtime = clock() - runtime;
     time_taken_strings = ((double)runtime)/CLOCKS_PER_SEC; // in seconds
     printf("%f seconds to sort %d strings.\n", time_taken_strings, rows);
