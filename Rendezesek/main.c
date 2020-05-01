@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ThreeWayRadixQSort.h>
+#include <typedef.h>
 
 #define MAX_SZEMELYEK 10
 
@@ -13,23 +14,7 @@ ahol a lista tartalmazza a személyeket, melyek tartalmazzák a nevet és a szul
 képes feltölteni a listát. Az állomány soronként egy személy adatait tartalmazza a következőképpen:
 */
 
-typedef char nev[30];
-typedef unsigned int ev;
-typedef unsigned int ho;
-typedef unsigned int nap;
 
-typedef struct szulDatum {
-    ev ev;
-    ho ho;
-    nap nap;
-} szuldatum;
-
-typedef struct szemely {
-    nev nev;
-    szuldatum szulDatum;
-} szemely;
-
-typedef szemely *lista;
 typedef char allomanynev[30];
 
 lista letrehoz(char * allomanynev);
@@ -42,6 +27,8 @@ int main()
 {
     lista szemelyek = malloc(sizeof (*szemelyek) * MAX_SZEMELYEK);
     szemelyek = letrehoz("in.txt");
+
+    kiir(szemelyek);
     szemelyek = rendez(szemelyek, "nev", 1);
     kiir(szemelyek);
 
@@ -52,26 +39,25 @@ lista letrehoz(char * allomanynev)
 {
     FILE *file;
     file = fopen(allomanynev, "r");
-
-
-    char str[30];
-    char delim[] = " ";
-    char *ptr;
-
     int i=0;
 
-    lista szemelyek = malloc(sizeof(*szemelyek) * MAX_SZEMELYEK);
+    lista szemelyek = malloc(sizeof(*szemelyek) * MAX_SZEMELYEK + sizeof(int));
 
     if (file == NULL) perror ("Fajl nyitasi hiba");
     else
     {
-        //while( fgets(str, 9999, file) != NULL )
         while (fscanf(file, "%ul", &szemelyek[i].szulDatum.ev) != EOF)
         {
             fscanf(file, "%ul", &szemelyek[i].szulDatum.ho);
             fscanf(file, "%ul", &szemelyek[i].szulDatum.nap);
-            fscanf(file, "%s", NULL); // nap es nev kozotti szokoz
+            fscanf(file, "%s", (char*)NULL); // nap es nev kozotti szokoz
             fgets(szemelyek[i].nev, sizeof (szemelyek[i].nev), file);
+            size_t len = strlen (szemelyek[i].nev);
+            if (len && szemelyek[i].nev[len-1] == '\n')
+                szemelyek[i].nev[--len] = 0;
+            if (len && szemelyek[i].nev[len-1] == '\r')
+                szemelyek[i].nev[--len] = 0;
+
             i++;
         }
         fclose (file);
@@ -83,8 +69,8 @@ lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
     irany = 0; // remove unused warning temporarily
     if (strcmp(rendezesimezo, "nev") == 0)
     {
-        printf("Nev szerinti rendezes\n");
-        //sortString();
+        printf("Nev szerinti rendezes\n");        
+        sortNev(szemelyek, 5);
     }
     else if (strcmp(rendezesimezo, "szuldatum") == 0)
     {
@@ -98,4 +84,5 @@ void kiir(lista szemelyek)
 {
     for (unsigned int i=0; i<5; i++)
         printf("%s \t%d.%d.%d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
+    printf("\n");
 }

@@ -8,4 +8,5 @@ SOURCES += \
 
 HEADERS += \
     ThreeWayRadixQSort.h \
-    TimSort.h
+    TimSort.h \
+    typedef.h

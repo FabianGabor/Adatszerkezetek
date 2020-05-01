@@ -8,10 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <typedef.h>
 
-
-typedef char *String;
-typedef String *StringArr;
 
 
 // 3-way radix quicksort
@@ -70,25 +68,25 @@ static int less(String v, String w, int d) {
 }
 
 // is the array sorted
-static int isSorted(StringArr a) {
+static int isSorted(lista a) {
     for (int i = 1; i < (int)sizeof(a); i++)
-        if (strcmp(a[i],a[i-1]) < 0) return 0;
+        if (strcmp(a[i].nev,a[i-1].nev) < 0) return 0;
 
     return 1;
 }
 
 // exchange a[i] and a[j]
-static void exch(StringArr a, int i, int j) {
-    String temp = malloc(sizeof(char) * 500);
-    strcpy(temp, a[i]);
+static void exch(lista a, int i, int j) {
+    szemely temp;
+    temp = a[i];
     a[i] = a[j];
     a[j] = temp;
 }
 
 // sort from a[lo] to a[hi], starting at the dth character
-static void insertion(StringArr a, int lo, int hi, int d) {
+static void insertion(lista a, int lo, int hi, int d) {
     for (int i = lo; i <= hi; i++)
-        for (int j = i; j > lo && less(a[j], a[j-1], d); j--)
+        for (int j = i; j > lo && less(a[j].nev, a[j-1].nev, d); j--)
             exch(a, j, j-1);
 }
 
@@ -97,7 +95,7 @@ static void insertion(StringArr a, int lo, int hi, int d) {
 // 3-way string quicksort a[lo..hi] starting at dth character
 
 
-static void sort(StringArr a, int lo, int hi, int d){
+static void sort(lista a, int lo, int hi, int d){
 
     // cutoff to insertion sort for small subarrays
     if (hi <= lo + CUTOFF) {
@@ -108,10 +106,10 @@ static void sort(StringArr a, int lo, int hi, int d){
 
     if (hi<=lo) return;
     int lt = lo, gt = hi, i=lo+1; // use 3 pointers: lt, i, gt
-    char pivot = charAt(a[lo],d);
+    char pivot = charAt(a[lo].nev,d);
     while(i<=gt) //invariant: a[lo,lt)<pivot, a(gt,hi]>pivot, a[lt,i]=pivot
     {
-        char c = charAt(a[i],d);
+        char c = charAt(a[i].nev,d);
         if(c<pivot)
             exch(a,lt++,i++);
         else
@@ -124,9 +122,9 @@ static void sort(StringArr a, int lo, int hi, int d){
 }
 
 
-static void sortString(StringArr a, unsigned int rows) {
+void sortNev(lista a, unsigned int rows) {
     sort(a, 0, rows-1, 0);
-    assert (isSorted(a));
+    //assert (isSorted(a));
 }
 
 #endif // THREEWAYRADIXQSORT_H
