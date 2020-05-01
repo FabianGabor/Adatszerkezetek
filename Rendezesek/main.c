@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ThreeWayRadixQSort.h>
+#include <TimSort.h>
 #include <typedef.h>
 
-#define MAX_SZEMELYEK 10
+#define MAX_SZEMELYEK 1000
 
 /*
 Személyek adatait tartjuk nyilván: név (max. 29 karakter, szóközt is tartalmazhat), születési év, hónap, nap.
@@ -22,14 +23,15 @@ lista letrehoz(char * allomanynev);
 lista rendez(lista szemelyek, char * rendezesimezo, int irany);
 void kiir(lista szemelyek);
 
+unsigned int letszam = 0;
 
 int main()
 {
     lista szemelyek = malloc(sizeof (*szemelyek) * MAX_SZEMELYEK);
-    szemelyek = letrehoz("in.txt");
+    szemelyek = letrehoz("MOCK_DATA.txt");
 
     kiir(szemelyek);
-    szemelyek = rendez(szemelyek, "nev", 1);
+    szemelyek = rendez(szemelyek, "szuldatum", 1);
     kiir(szemelyek);
 
     return 0;
@@ -39,42 +41,43 @@ lista letrehoz(char * allomanynev)
 {
     FILE *file;
     file = fopen(allomanynev, "r");
-    int i=0;
 
-    lista szemelyek = malloc(sizeof(*szemelyek) * MAX_SZEMELYEK + sizeof(int));
+    lista szemelyek = malloc(sizeof(*szemelyek) * MAX_SZEMELYEK);
 
     if (file == NULL) perror ("Fajl nyitasi hiba");
     else
     {
-        while (fscanf(file, "%ul", &szemelyek[i].szulDatum.ev) != EOF)
+        while (fscanf(file, "%ul", &szemelyek[letszam].szulDatum.ev) != EOF && letszam < MAX_SZEMELYEK)
         {
-            fscanf(file, "%ul", &szemelyek[i].szulDatum.ho);
-            fscanf(file, "%ul", &szemelyek[i].szulDatum.nap);
+            fscanf(file, "%ul", &szemelyek[letszam].szulDatum.ho);
+            fscanf(file, "%ul", &szemelyek[letszam].szulDatum.nap);
             fscanf(file, "%s", (char*)NULL); // nap es nev kozotti szokoz
-            fgets(szemelyek[i].nev, sizeof (szemelyek[i].nev), file);
-            size_t len = strlen (szemelyek[i].nev);
-            if (len && szemelyek[i].nev[len-1] == '\n')
-                szemelyek[i].nev[--len] = 0;
-            if (len && szemelyek[i].nev[len-1] == '\r')
-                szemelyek[i].nev[--len] = 0;
+            fgets(szemelyek[letszam].nev, sizeof (szemelyek[letszam].nev), file);
+            size_t len = strlen (szemelyek[letszam].nev);
+            if (len && szemelyek[letszam].nev[len-1] == '\n')
+                szemelyek[letszam].nev[--len] = 0;
+            if (len && szemelyek[letszam].nev[len-1] == '\r')
+                szemelyek[letszam].nev[--len] = 0;
 
-            i++;
+            letszam++;
         }
         fclose (file);
     }
     return szemelyek;
 }
 
-lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
-    irany = 0; // remove unused warning temporarily
+lista rendez (lista szemelyek, char * rendezesimezo, int irany) {    
     if (strcmp(rendezesimezo, "nev") == 0)
     {
-        printf("Nev szerinti rendezes\n");        
-        sortNev(szemelyek, 5);
+        printf("*** Nev szerinti rendezes ***\n");
+        sortNev(szemelyek, letszam);
+        if (!irany)
+            reverse(szemelyek, letszam);
     }
     else if (strcmp(rendezesimezo, "szuldatum") == 0)
     {
         printf("Szuletesi datum szerinti rendezes\n");
+        timSort(szemelyek, letszam);
     }
 
     return szemelyek;
@@ -82,7 +85,7 @@ lista rendez (lista szemelyek, char * rendezesimezo, int irany) {
 
 void kiir(lista szemelyek)
 {
-    for (unsigned int i=0; i<5; i++)
-        printf("%s \t%d.%d.%d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
+    for (unsigned int i=0; i<letszam; i++)
+        printf("%s \n\t%d.%02d.%02d.\n", szemelyek[i].nev, szemelyek[i].szulDatum.ev, szemelyek[i].szulDatum.ho, szemelyek[i].szulDatum.nap);
     printf("\n");
 }

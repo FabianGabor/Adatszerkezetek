@@ -48,18 +48,7 @@ int charAt(String s, int d) {
 }
 
 // is v less than w, starting at character d
-// DEPRECATED BECAUSE OF SLOW SUBSTRING EXTRACTION IN JAVA 7
-// private static boolean less(String v, String w, int d) {
-//    assert v.substring(0, d).equals(w.substring(0, d));
-//    return v.substring(d).compareTo(w.substring(d)) < 0;
-// }
-
-// is v less than w, starting at character d
 static int less(String v, String w, int d) {
-
-    //assert ( strcmp(substring(v, 0, d), (substring(w, 0, d))) );
-
-
     for (int i = d; i < (int) min(strlen(v), strlen(w)); i++) {
         if (charAt(v, i) < charAt(w, i)) return 1;
         if (charAt(v,i) > charAt(w,i)) return 0;
@@ -68,9 +57,12 @@ static int less(String v, String w, int d) {
 }
 
 // is the array sorted
-static int isSorted(lista a) {
-    for (int i = 1; i < (int)sizeof(a); i++)
-        if (strcmp(a[i].nev,a[i-1].nev) < 0) return 0;
+static int isSorted(lista a, int rows) {
+    int i = 1;
+    for (i = 1; i < rows; i++)
+    {
+       if (strcmp(a[i].nev,a[i-1].nev) < 0) return 0;
+    }
 
     return 1;
 }
@@ -121,10 +113,24 @@ static void sort(lista a, int lo, int hi, int d){
     sort(a,gt+1,hi,d);
 }
 
+void reverse(lista a, unsigned int letszam)
+{
+    if (a == NULL || letszam < 2)
+        return;
 
-void sortNev(lista a, unsigned int rows) {
+    for (unsigned int i = 0; i < letszam / 2; i++)
+    {
+        szemely temp = a[i];
+        a[i] = a[letszam - 1 - i];
+        a[letszam - 1 - i] = temp;
+    }
+}
+
+
+void sortNev(lista a, unsigned int rows)
+{
     sort(a, 0, rows-1, 0);
-    //assert (isSorted(a));
+    assert (isSorted(a, rows));
 }
 
 #endif // THREEWAYRADIXQSORT_H

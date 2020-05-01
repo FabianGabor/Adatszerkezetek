@@ -1,19 +1,25 @@
 #ifndef TIMSORT_H
 #define TIMSORT_H
 
+#include <typedef.h>
+
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
 #endif
 
 const int RUN = 32;
 
-void insertionSort(int arr[], int left, int right)
+int kor(szemely a) {
+    return (a.szulDatum.ev - 1900) * 365 + a.szulDatum.ho * 30 + a.szulDatum.nap;
+}
+
+void insertionSort(lista arr, int left, int right)
 {
     for (int i = left + 1; i <= right; i++)
     {
-        int temp = arr[i];
+        szemely temp = arr[i];
         int j = i - 1;
-        while (arr[j] > temp && j >= left)
+        while (kor(arr[j]) > kor(temp) && j >= left)
         {
             arr[j+1] = arr[j];
             j--;
@@ -22,10 +28,10 @@ void insertionSort(int arr[], int left, int right)
     }
 }
 
-void merge(int arr[], int l, int m, int r)
+void merge(lista arr, int l, int m, int r)
 {
     int len1 = m - l + 1, len2 = r - m;
-    int left[len1], right[len2];
+    szemely left[len1], right[len2];
     for (int i = 0; i < len1; i++)
         left[i] = arr[l + i];
     for (int i = 0; i < len2; i++)
@@ -37,7 +43,7 @@ void merge(int arr[], int l, int m, int r)
 
     while (i < len1 && j < len2)
     {
-        if (left[i] <= right[j])
+        if (kor(left[i]) <= kor(right[j]))
         {
             arr[k] = left[i];
             i++;
@@ -65,7 +71,7 @@ void merge(int arr[], int l, int m, int r)
     }
 }
 
-void timSort(int arr[], int n)
+void timSort(lista arr, int n)
 {
     for (int i = 0; i < n; i+=RUN)
         insertionSort(arr, i, min((i+31), (n-1)));
