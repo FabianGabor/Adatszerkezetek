@@ -9,16 +9,6 @@ typedef struct beteg {
     int fertozottek_szama;
 } *beteg;
 
-
-/*
-typedef struct beteg{
-    int data;
-    struct Node *elsoFertozott;
-    struct Node *tovabbiFertozott;
-} beteg;
-*/
-
-
 typedef struct gocpont {
     beteg beteg;
 } *gocpont;
@@ -49,27 +39,28 @@ int main()
     b21 = uj_beteg(21);
     bx = uj_beteg(999);
 
-    gocpont g = uj_gocpont(b0);
+    gocpont g0 = uj_gocpont(b0);
 
-    uj_beteg_fertozes(g, b0, b11);
-    uj_beteg_fertozes(g, b0, b12);
-    uj_beteg_fertozes(g, b0, b13);
+    uj_beteg_fertozes(g0, b0, b11);
+    uj_beteg_fertozes(g0, b0, b12);
+    uj_beteg_fertozes(g0, b0, b13);
+    uj_beteg_fertozes(g0, b11, b21);
 
-    g->beteg->fertozottek[0]->fertozottek = malloc(sizeof(beteg));
-    g->beteg->fertozottek[0]->fertozottek[0] = b21;
-    g->beteg->fertozottek[0]->fertozottek_szama = 1;
+    gocpont g1 = uj_gocpont(bx);
+    uj_beteg_fertozes(g1, bx, b21);
 
-    kiir_gocpont(g);
+    kiir_gocpont(g0);
+    kiir_gocpont(g1);
 
-    printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g, b21) ? "igen" : "nem" );
-    printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g,  bx) ? "igen" : "nem" );
+    printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
+    printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g0,  bx) ? "igen" : "nem" );
 
     return 0;
 }
 
 gocpont uj_gocpont(beteg nulladikbeteg)
 {
-    gocpont g = malloc(sizeof(gocpont) * 2);
+    gocpont g = malloc(sizeof(*g));
     g->beteg = nulladikbeteg;
 
     return g;
@@ -110,36 +101,20 @@ void kiir_gocpont(gocpont g)
 int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott)
 {
     beteg keresett = g->beteg;
+    keresett = keres(keresett, fertozo);
 
-    while (keresett->id != fertozo->id)
+    if (keresett != NULL)
     {
-        beteg tmp = keresett;
-        for (int i=0; i<keresett->fertozottek_szama || tmp->id != keresett->id; i++)
-            tmp = keresett->fertozottek[i];
-    }
-
-
-    if (keresett->id == fertozo->id)
-    {
-        if (g->beteg->fertozottek_szama == 0)
-        {
-            g->beteg->fertozottek = malloc(sizeof(beteg));
-            g->beteg->fertozottek[g->beteg->fertozottek_szama] = fertozott;
-            g->beteg->fertozottek_szama++;
-        }
+        if (keresett->fertozottek_szama == 0)
+            keresett->fertozottek = malloc(sizeof (beteg));
         else
-        {
-            g->beteg->fertozottek = realloc(g->beteg->fertozottek, sizeof(beteg) * (g->beteg->fertozottek_szama+1));
-            g->beteg->fertozottek[g->beteg->fertozottek_szama] = fertozott;
-            g->beteg->fertozottek_szama++;
-        }
-    }
-    else
-    {
-        //beteg keresett = g->beteg;
-        //while (keresett->id != fertozo->id)
-    }
+            keresett->fertozottek = realloc(keresett->fertozottek, sizeof (beteg) * (keresett->fertozottek_szama+1));
 
+        keresett->fertozottek[keresett->fertozottek_szama] = fertozott;
+        keresett->fertozottek_szama++;
+
+        return 1;
+    }
     return 0;
 }
 
