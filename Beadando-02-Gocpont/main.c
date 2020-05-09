@@ -16,11 +16,11 @@ typedef struct gocpont {
 gocpont uj_gocpont(beteg nulladikbeteg);                            //  2. OK
 beteg uj_beteg(int azonosito);                                      //  2. OK
 
-void gocpont_torol(gocpont g);                                      //  3.
-void beteg_torol(beteg b);                                          //  3.
+void gocpont_torol(gocpont g);                                      //  3. OK
+void beteg_torol(beteg b);                                          //  3. OK
 
 int letszam(gocpont g);                                             //  4. OK
-int fertozottek_szama(gocpont g, beteg b);                          //  5.
+int fertozottek_szama(gocpont g, beteg b);                          //  5. OK
 
 int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott);   //  6. OK
 
@@ -75,6 +75,7 @@ int main()
     letszam(g0);
     letszam(g1);
 
+    fertozottek_szama(g0, b13);
 
     gocpont_torol(g0);
 
@@ -120,6 +121,18 @@ int letszam(gocpont g)
     int summ = sum(beteg);
     printf("Letszam: %d\n", summ);
     return summ;
+}
+
+int fertozottek_szama(gocpont g, beteg b)
+{
+    beteg beteg = b;
+    if (keres(g->beteg, b) != NULL)
+    {
+        int summ = sum(beteg) - 1; // a beteget nem kell szamolni
+        printf("Fertozottek szama: %d\n", summ);
+        return summ;
+    }
+    return -1;
 }
 
 // 6.
