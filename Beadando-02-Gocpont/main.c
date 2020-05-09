@@ -117,7 +117,7 @@ void beteg_torol(beteg b)
 int letszam(gocpont g)
 {
     beteg beteg = g->beteg;
-    int summ = sum(beteg) + 1; // + elso beteg
+    int summ = sum(beteg);
     printf("Letszam: %d\n", summ);
     return summ;
 }
@@ -210,7 +210,7 @@ int sum(beteg beteg)
         return 0;
 
     for (int i = 0; i < beteg->fertozottek_szama; i++)
-        return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama;
+        return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama + 1; // +1 fertozo
 
     return 0;
 }
