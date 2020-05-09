@@ -13,21 +13,27 @@ typedef struct gocpont {
     beteg beteg;
 } *gocpont;
 
-gocpont uj_gocpont(beteg nulladikbeteg);    // OK
-beteg uj_beteg(int azonosito);              // OK
+gocpont uj_gocpont(beteg nulladikbeteg);                            //  2. OK
+beteg uj_beteg(int azonosito);                                      //  2. OK
 
-void gocpont_torol(gocpont g);
-void beteg_torol(beteg b);
+void gocpont_torol(gocpont g);                                      //  3.
+void beteg_torol(beteg b);                                          //  3.
 
-int letszam(gocpont g);
-int fertozottek_szama(gocpont g, beteg b);
+int letszam(gocpont g);                                             //  4. OK
+int fertozottek_szama(gocpont g, beteg b);                          //  5.
 
-int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott);
+int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott);   //  6. OK
+
+void kiir_gocpont(gocpont g);                                       //  7. OK
+int fertozott_e(gocpont g, beteg b);                                //  8. OK
+int megfertozte_e(gocpont g, beteg b1, beteg b2);                   //  9.
+int fertozobb_e(gocpont g, beteg b1, beteg b2);                     // 10.
+
+// segedfuggvenyek:
 beteg keres(beteg fertozo, beteg keresett);
-//void kiir(beteg beteg);
-void kiir_gocpont(gocpont g);
+void kiir(beteg beteg);
+int sum(beteg beteg);
 
-int fertozott_e(gocpont g, beteg b);
 
 int main()
 {
@@ -61,6 +67,7 @@ int main()
     return 0;
 }
 
+// 2.
 gocpont uj_gocpont(beteg nulladikbeteg)
 {
     gocpont g = malloc(sizeof(*g));
@@ -69,7 +76,7 @@ gocpont uj_gocpont(beteg nulladikbeteg)
     return g;
 }
 
-
+// 2.
 beteg uj_beteg(int azonosito)
 {
     beteg b = malloc(sizeof(*b));
@@ -78,29 +85,16 @@ beteg uj_beteg(int azonosito)
     return b;
 }
 
-
-void kiir(beteg beteg)
-{
-    if (beteg == NULL)
-        return;
-
-    printf("Sorszam: %3d Fertozottek szama: %d\n", beteg->id, beteg->fertozottek_szama);
-
-    for (int i = 0; i < beteg->fertozottek_szama ; i++)
-    {
-        kiir(beteg->fertozottek[i]);
-    }
-}
-
-void kiir_gocpont(gocpont g)
+// 4.
+int letszam(gocpont g)
 {
     beteg beteg = g->beteg;
-    kiir(beteg);
-    printf("\n");
+    int summ = sum(beteg) + 1; // + elso beteg
+    printf("Letszam: %d\n", summ);
+    return summ;
 }
 
-
-
+// 6.
 int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott)
 {
     beteg keresett = g->beteg;
@@ -121,6 +115,47 @@ int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott)
     return 0;
 }
 
+// 7.
+void kiir_gocpont(gocpont g)
+{
+    beteg beteg = g->beteg;
+    kiir(beteg);
+    printf("\n");
+}
+
+// 8.
+int fertozott_e(gocpont g, beteg b)
+{
+    if (g->beteg->id == b->id)
+        return 1;
+    beteg betegek = g->beteg;
+    if (keres(betegek, b) != NULL)
+        return 1;
+
+    return 0;
+}
+
+
+
+
+/****************************************************
+****************** SEGEDFUGGVENYEK ******************
+****************************************************/
+
+void kiir(beteg beteg)
+{
+    if (beteg == NULL)
+        return;
+
+    printf("Sorszam: %3d Fertozottek szama: %d\n", beteg->id, beteg->fertozottek_szama);
+
+    for (int i = 0; i < beteg->fertozottek_szama ; i++)
+    {
+        kiir(beteg->fertozottek[i]);
+    }
+}
+
+
 beteg keres(beteg fertozo, beteg keresett) {
     if (fertozo->id == keresett->id)
         return fertozo;
@@ -132,16 +167,7 @@ beteg keres(beteg fertozo, beteg keresett) {
     return NULL;
 }
 
-int fertozott_e(gocpont g, beteg b)
-{
-    if (g->beteg->id == b->id)
-        return 1;
-    beteg betegek = g->beteg;
-    if (keres(betegek, b) != NULL)
-        return 1;
 
-    return 0;
-}
 
 int sum(beteg beteg)
 {
@@ -154,12 +180,4 @@ int sum(beteg beteg)
         return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama;
 
     return 0;
-}
-
-int letszam(gocpont g)
-{
-    beteg beteg = g->beteg;
-    int summ = sum(beteg) + 1; // + elso beteg
-    printf("Letszam: %d\n", summ);
-    return summ;
 }
