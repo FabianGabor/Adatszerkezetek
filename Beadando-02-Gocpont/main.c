@@ -33,17 +33,22 @@ int fertozobb_e(gocpont g, beteg b1, beteg b2);                     // 10.
 beteg keres(beteg fertozo, beteg keresett);
 void kiir(beteg beteg);
 int sum(beteg beteg);
+void gocpont_beteg_torol(beteg beteg);
+void PrintTree(gocpont g);
+void print_structure ( beteg beteg, int level, int irany );
 
 
 int main()
 {
-    beteg b0, b11, b12, b13, b21,bx;
+    beteg b0, b11, b12, b13, b21, b22, bx, by;
     b0 = uj_beteg(01);
     b11 = uj_beteg(11);
     b12 = uj_beteg(12);
     b13 = uj_beteg(13);
     b21 = uj_beteg(21);
-    bx = uj_beteg(999);
+    b22 = uj_beteg(22);
+    bx = uj_beteg(98);
+    by = uj_beteg(99);
 
     gocpont g0 = uj_gocpont(b0);
 
@@ -51,18 +56,27 @@ int main()
     uj_beteg_fertozes(g0, b0, b12);
     uj_beteg_fertozes(g0, b0, b13);
     uj_beteg_fertozes(g0, b11, b21);
+    uj_beteg_fertozes(g0, b11, b22);
+    uj_beteg_fertozes(g0, b13, bx);
+    //uj_beteg_fertozes(g0, b13, by);
 
-    gocpont g1 = uj_gocpont(bx);
-    uj_beteg_fertozes(g1, bx, b21);
+    gocpont g1 = uj_gocpont(by);
+    uj_beteg_fertozes(g1, by, b21);
 
     kiir_gocpont(g0);
-    kiir_gocpont(g1);
+    PrintTree(g0);
 
-    printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
-    printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g0,  bx) ? "igen" : "nem" );
+    kiir_gocpont(g1);
+    PrintTree(g1);
+
+    //printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
+    //printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g0,  bx) ? "igen" : "nem" );
 
     letszam(g0);
     letszam(g1);
+
+
+    gocpont_torol(g0);
 
     return 0;
 }
@@ -83,6 +97,20 @@ beteg uj_beteg(int azonosito)
     b->id = azonosito;
     b->fertozottek_szama = 0;
     return b;
+}
+
+void gocpont_torol(gocpont g)
+{
+    beteg beteg = g->beteg;
+    gocpont_beteg_torol(beteg);
+    g->beteg->fertozottek_szama = 0;
+    free(g);
+    g = NULL;
+}
+
+void beteg_torol(beteg b)
+{
+    free(b);
 }
 
 // 4.
@@ -118,9 +146,14 @@ int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott)
 // 7.
 void kiir_gocpont(gocpont g)
 {
-    beteg beteg = g->beteg;
-    kiir(beteg);
-    printf("\n");
+    if (g != NULL)
+    {
+        beteg beteg = g->beteg;
+        kiir(beteg);
+        printf("\n");
+    }
+    else
+        printf("Nem letezo gocpont! \n");
 }
 
 // 8.
@@ -180,4 +213,67 @@ int sum(beteg beteg)
         return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama;
 
     return 0;
+}
+
+
+void gocpont_beteg_torol(beteg beteg)
+{
+    if (beteg == NULL)
+        return;
+
+    for (int i = 0; i < beteg->fertozottek_szama ; i++)
+    {
+        gocpont_beteg_torol(beteg->fertozottek[i]);
+    }
+    beteg_torol(beteg);
+}
+
+
+
+
+void PrintTree(gocpont g)
+{
+    print_structure(g->beteg, 0, 0);
+}
+
+
+
+void print_structure ( beteg beteg, int level, int irany )
+{
+    if ( beteg == NULL ) {
+        for ( int i = 0; i < level; i++ )
+            putchar ( '\t' );
+        puts ( "~" );
+    }
+    if (beteg->id == 0)
+        printf("\n");
+    else
+    {
+        for (int i = beteg->fertozottek_szama - 1; i > beteg->fertozottek_szama / 2 - 1; i--)
+        {
+            print_structure(beteg->fertozottek[i], level+1, 1);
+        }
+        //printf("\n");
+
+        for ( int i = 0; i < level; i++ )
+            printf("\t");
+
+        if (level)
+        {
+            if (irany)
+                printf("_/");
+            else
+                printf("‾\\");
+        }
+
+
+        printf ( "%3d \n", beteg->id );
+
+
+        for (int i = 0; i < beteg->fertozottek_szama / 2; i++)
+        {
+            print_structure(beteg->fertozottek[i], level+1, 0);
+        }
+        //printf("\n");
+    }
 }
