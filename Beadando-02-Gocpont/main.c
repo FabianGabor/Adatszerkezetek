@@ -13,8 +13,8 @@ typedef struct gocpont {
     beteg beteg;
 } *gocpont;
 
-gocpont uj_gocpont(beteg nulladikbeteg);
-beteg uj_beteg(int azonosito);
+gocpont uj_gocpont(beteg nulladikbeteg);    // OK
+beteg uj_beteg(int azonosito);              // OK
 
 void gocpont_torol(gocpont g);
 void beteg_torol(beteg b);
@@ -55,6 +55,9 @@ int main()
     printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
     printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g0,  bx) ? "igen" : "nem" );
 
+    letszam(g0);
+    letszam(g1);
+
     return 0;
 }
 
@@ -86,7 +89,7 @@ void kiir(beteg beteg)
     for (int i = 0; i < beteg->fertozottek_szama ; i++)
     {
         kiir(beteg->fertozottek[i]);
-    }    
+    }
 }
 
 void kiir_gocpont(gocpont g)
@@ -138,4 +141,25 @@ int fertozott_e(gocpont g, beteg b)
         return 1;
 
     return 0;
+}
+
+int sum(beteg beteg)
+{
+    if (beteg == NULL)
+        return 0;
+    if (beteg->fertozottek == NULL)
+        return 0;
+
+    for (int i = 0; i < beteg->fertozottek_szama; i++)
+        return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama;
+
+    return 0;
+}
+
+int letszam(gocpont g)
+{
+    beteg beteg = g->beteg;
+    int summ = sum(beteg) + 1; // + elso beteg
+    printf("Letszam: %d\n", summ);
+    return summ;
 }
