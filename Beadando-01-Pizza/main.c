@@ -224,6 +224,10 @@ void havirendeles_torol(havirendeles h)
 {
     if (h != NULL)
     {
+        for (int i=0; i<h->mennyiseg; i++)
+        {
+            rendeles_torol(h->rendeles[i]);
+        }
         free(h);
         h = NULL;
     }
