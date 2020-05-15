@@ -185,6 +185,20 @@ int fertozott_e(gocpont g, beteg b)
     return 0;
 }
 
+// 9.
+int megfertozte_e(gocpont g, beteg b1, beteg b2)
+{
+    beteg keresett1;
+    if ((keresett1 = keres(g->beteg, b1)) != NULL)
+    {
+        for (int i=0; i<keresett1->fertozottek_szama; i++)
+            if (keresett1->fertozottek[i]->id == b2->id)
+                return 1;
+    }
+
+    return 0;
+}
+
 
 
 
