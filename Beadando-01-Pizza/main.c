@@ -175,14 +175,10 @@ rendeles uj_rendeles(int futar, int nap, pizza p)
     if (p) // p NULL check
     {
         if (futar >= 1 && futar <= 9 && nap >= 1 && nap <= 30)
-        {            
-            //rendeles r = malloc(sizeof (*r));
-            //rendeles r = calloc(1,sizeof(r));
-            rendeles r = calloc(1,sizeof(*r));
-
-            //r->pizza = malloc(sizeof (*p) * 6);
-            r->pizza = calloc(6,sizeof(p));
-            r->pizza = calloc(6,sizeof(*p));
+        {
+            //rendeles r = calloc(1,sizeof(*r));
+            rendeles r = malloc(sizeof(*r));
+            r->pizza = calloc(6,sizeof(*p)); // el kene donteni, hogy memoriat vagy futasidot szeretnenk sporolni.
 
             r->futar = futar;
             r->nap = nap;
