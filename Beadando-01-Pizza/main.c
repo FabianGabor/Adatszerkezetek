@@ -44,7 +44,7 @@ typedef struct napok {
     nap *nap;
 } napok;
 
-int hrMennyiseg = 0;
+//int hrMennyiseg = 0;
 
 
 havirendeles uj_havirendeles(rendeles r);
@@ -102,9 +102,10 @@ int main()
 
     p = uj_pizza(0, 'A');
     r = uj_rendeles(2, 2, p);
-    p = uj_pizza(0, 'G');
+    p = uj_pizza(1, 'A');
     plusz_pizza(r,p);
     plusz_rendeles(h, r);
+
 
     randomRendelesek(h,r,p,3);
 
@@ -164,7 +165,7 @@ void pizza_torol(pizza p)
     if (!p || p->fajta != '\0')
     {
         free(p);
-        p = NULL;
+        //p = NULL;
     }
 }
 
@@ -211,15 +212,12 @@ void rendeles_torol(rendeles r)
 havirendeles uj_havirendeles(rendeles r)
 {
     if (r) // r NULL check
-    {
-        //havirendeles h = malloc(sizeof(h));
+    {        
         havirendeles h = malloc(sizeof(*h));
-
-        //h->rendeles = malloc(sizeof(r));
         h->rendeles = malloc(sizeof(*r));
 
-        h->rendeles[hrMennyiseg++] = r;
-        h->mennyiseg++;
+        h->mennyiseg = 0;
+        h->rendeles[h->mennyiseg++] = r;
 
         return h;
     }
