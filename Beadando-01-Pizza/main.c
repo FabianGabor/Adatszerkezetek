@@ -19,6 +19,7 @@ typedef struct rendeles {
     int futar;
     int nap;
     pizza pizza;
+    int pizzakSzama;
 } *rendeles;
 
 typedef struct havirendeles {
@@ -63,6 +64,7 @@ int havi_min_nap(havirendeles h); // 7
 char havi_max_pizza(havirendeles h); // 8
 void plusz_rendeles(havirendeles h, rendeles r); // 9
 void plusz_pizza(rendeles r, pizza p); // 10
+void plusz_pizza_memOpt(rendeles r, pizza p); // 10 - memoria optimizalt struktura eseten, ha nincs lefoglalva 6 kulonbozo pizzanak elore a memoria
 
 void randomRendelesek(havirendeles h, rendeles r, pizza p, int n);
 int benneNap (nap nap, int napokSzama, int keresettNap);
@@ -336,6 +338,33 @@ void plusz_pizza(rendeles r, pizza p)  // 10
             r->pizza[p->fajta - 'A'].db += p->db;
             r->pizza[p->fajta - 'A'].fajta = p->fajta;
         }
+    }
+}
+
+void plusz_pizza_memOpt(rendeles r, pizza p)  // 10
+{
+    if (p && r)
+    {
+        for (int i=0; i<r->pizzakSzama; i++)
+            if (r->pizza[i].fajta == p->fajta) // benne van-e mar a pizza
+            {
+                if (r->pizza[i].db + p->db <= 9)
+                {
+                    r->pizza[i].db += p->db;
+                }
+                return;
+            }
+        pizza *temp = NULL;
+        temp = (pizza *) realloc(r->pizza, sizeof(*p) * (r->pizzakSzama + 1) );
+        if (temp == NULL)
+        {
+            printf("Hiba a memoria lefoglalasanal a plusz rendelesnek!");
+            exit(1);
+        }
+        else
+            r->pizza = *temp;
+        r->pizza[r->pizzakSzama++] = *p;
+
     }
 }
 
