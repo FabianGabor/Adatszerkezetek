@@ -69,13 +69,17 @@ int main()
     kiir_gocpont(g1);
     PrintTree(g1);
 
-    //printf("Fertozott-e #%3d: %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
-    //printf("Fertozott-e #%3d: %s \n",  bx->id, fertozott_e(g0,  bx) ? "igen" : "nem" );
+    printf("Fertozott-e g0-ban #%d? %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
+    printf("Fertozott-e g1-ben #%d? %s \n",  bx->id, fertozott_e(g1,  bx) ? "igen" : "nem" );
 
     letszam(g0);
     letszam(g1);
 
     fertozottek_szama(g0, b13);
+
+    printf("Megfertozte-e g0-ban #%d beteg #%d beteget? %s \n", b11->id, b22->id, megfertozte_e(g0, b11, b22) ? "igen" : "nem" );
+    printf("Megfertozte-e g0-ban #%d beteg #%d beteget? %s \n", b11->id, b13->id, megfertozte_e(g0, b11, b13) ? "igen" : "nem" );
+
 
     gocpont_torol(g0);
 
