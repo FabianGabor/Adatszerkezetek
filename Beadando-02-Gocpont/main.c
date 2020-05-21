@@ -74,16 +74,44 @@ int main()
     printf("Fertozott-e g0-ban #%d? %s \n", b21->id, fertozott_e(g0, b21) ? "igen" : "nem" );
     printf("Fertozott-e g1-ben #%d? %s \n",  bx->id, fertozott_e(g1,  bx) ? "igen" : "nem" );
 
-    letszam(g0);
-    letszam(g1);
-
-    fertozottek_szama(g0, b13);
+    printf("Letszam g0-ban: %d\n", letszam(g0));
+    printf("Letszam g1-ben: %d\n", letszam(g1));
 
     printf("Megfertozte-e g0-ban #%d beteg #%d beteget? %s \n", b11->id, b22->id, megfertozte_e(g0, b11, b22) ? "igen" : "nem" );
     printf("Megfertozte-e g0-ban #%d beteg #%d beteget? %s \n", b11->id, b13->id, megfertozte_e(g0, b11, b13) ? "igen" : "nem" );
 
 
+    printf("%d\n", fertozottek_szama(g0, b0));
+    printf("%d\n", fertozottek_szama(g0, b11));
+    printf("%d\n", fertozottek_szama(g0, b12));
+    printf("%d\n", fertozottek_szama(g0, b13));
+
+    // 10. Fertozobb-e?
+    {
+        beteg beteg1 = b12;
+        beteg beteg2 = b11;
+
+        printf("Fertozobb-e g0-ban #%d beteg #%d betegnel? ", beteg1->id, beteg2->id);
+        switch (fertozobb_e(g0, beteg1, beteg2))
+        {
+            case (1):
+                printf("igen\n");
+                break;
+            case (0):
+                printf("egyforma\n");
+                break;
+            case (-1):
+                printf("nem\n");
+        };
+    }
+
+    //beteg_torol(b13);
+    //PrintTree(g0);
+
+    // 3. Gocpont torol
+    printf("3. gocpont_torol(g0) \n");
     gocpont_torol(g0);
+    PrintTree(g0);
 
     return 0;
 }
