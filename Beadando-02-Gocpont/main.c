@@ -257,6 +257,17 @@ int sum(beteg beteg)
     return 0;
 }
 
+int fertozottek_szama_rekurziv(gocpont g, beteg b)
+{
+    beteg beteg = b;
+    if (keres(g->beteg, b) != NULL)
+    {
+        int summ = sum(beteg) - 1; // a beteget nem kell szamolni
+        return summ;
+    }
+    return -1;
+}
+
 
 void gocpont_beteg_torol(beteg beteg)
 {
