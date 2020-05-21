@@ -66,7 +66,9 @@ int main()
     gocpont g1 = uj_gocpont(by);
     uj_beteg_fertozes(g1, by, b21);
 
+    // 7.
     kiir_gocpont(g0);
+    // fa reprezentacio
     PrintTree(g0);
 
     kiir_gocpont(g1);
@@ -88,23 +90,23 @@ int main()
     printf("%d\n", fertozottek_szama(g0, b13));
 
     // 10. Fertozobb-e?
-    {
-        beteg beteg1 = b12;
-        beteg beteg2 = b11;
 
-        printf("Fertozobb-e g0-ban #%d beteg #%d betegnel? ", beteg1->id, beteg2->id);
-        switch (fertozobb_e(g0, beteg1, beteg2))
-        {
-            case (1):
-                printf("igen\n");
-                break;
-            case (0):
-                printf("egyforma\n");
-                break;
-            case (-1):
-                printf("nem\n");
-        };
-    }
+    beteg beteg1 = b12;
+    beteg beteg2 = b11;
+
+    printf("Fertozobb-e g0-ban #%d beteg #%d betegnel? ", beteg1->id, beteg2->id);
+    switch (fertozobb_e(g0, beteg1, beteg2))
+    {
+        case (1):
+            printf("igen\n");
+            break;
+        case (0):
+            printf("egyforma\n");
+            break;
+        case (-1):
+            printf("nem\n");
+    };
+
 
     //beteg_torol(b13);
     //PrintTree(g0);
@@ -112,6 +114,7 @@ int main()
     // 3. Gocpont torlese, benne betegek torlese
     printf("3. gocpont_torol(g0) \n");
     gocpont_torol(g0);
+    kiir_gocpont(g0);
     PrintTree(g0);
 
     return 0;
@@ -198,12 +201,12 @@ void kiir_gocpont(gocpont g)
 {
     if (g != NULL)
     {
-        beteg beteg = g->beteg;
-        kiir(beteg);
+        //beteg beteg = g->beteg;
+        kiir(g->beteg);
         printf("\n");
     }
     else
-        printf("Nem letezo gocpont! \n");
+        printf("Nem letezo gocpont! \n");    
 }
 
 // 8.
