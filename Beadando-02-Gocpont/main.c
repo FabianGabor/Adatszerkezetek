@@ -34,13 +34,14 @@ beteg keres(beteg fertozo, beteg keresett);
 void kiir(beteg beteg);
 int sum(beteg beteg);
 int fertozottek_szama_rekurziv(gocpont g, beteg b);
-void gocpont_beteg_torol(beteg beteg);
+void beteg_torol_rekurziv(beteg beteg);                              // betegek torlese rekurzivan, meghivja a void beteg_torol(beteg b) eljarast
 void PrintTree(gocpont g);
 void print_structure ( beteg beteg, int level, int irany );
 
 
 int main()
 {
+    // 2. Uj beteg letrehozasa azonositoval
     beteg b0, b11, b12, b13, b21, b22, bx, by;
     b0 = uj_beteg(01);
     b11 = uj_beteg(11);
@@ -60,7 +61,7 @@ int main()
     uj_beteg_fertozes(g0, b11, b21);
     uj_beteg_fertozes(g0, b11, b22);
     uj_beteg_fertozes(g0, b13, bx);
-    //uj_beteg_fertozes(g0, b13, by);
+    uj_beteg_fertozes(g0, b13, by);
 
     gocpont g1 = uj_gocpont(by);
     uj_beteg_fertozes(g1, by, b21);
@@ -108,7 +109,7 @@ int main()
     //beteg_torol(b13);
     //PrintTree(g0);
 
-    // 3. Gocpont torol
+    // 3. Gocpont torlese, benne betegek torlese
     printf("3. gocpont_torol(g0) \n");
     gocpont_torol(g0);
     PrintTree(g0);
@@ -138,7 +139,7 @@ beteg uj_beteg(int azonosito)
 void gocpont_torol(gocpont g)
 {
     beteg beteg = g->beteg;
-    gocpont_beteg_torol(beteg);
+    beteg_torol_rekurziv(beteg); // betegek torlese rekurzivan
     g->beteg->fertozottek_szama = 0;
     free(g);
     //g = NULL;
@@ -298,16 +299,16 @@ int fertozottek_szama_rekurziv(gocpont g, beteg b)
 }
 
 
-void gocpont_beteg_torol(beteg beteg)
+void beteg_torol_rekurziv(beteg beteg)
 {
     if (beteg == NULL)
         return;
 
     for (int i = 0; i < beteg->fertozottek_szama ; i++)
     {
-        gocpont_beteg_torol(beteg->fertozottek[i]);
+        beteg_torol_rekurziv(beteg->fertozottek[i]);
     }
-    beteg_torol(beteg);
+    beteg_torol(beteg); // egy beteg torlese
 }
 
 
