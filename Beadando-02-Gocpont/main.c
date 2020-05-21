@@ -124,19 +124,20 @@ void beteg_torol(beteg b)
 int letszam(gocpont g)
 {
     beteg beteg = g->beteg;
-    int summ = sum(beteg);
-    printf("Letszam: %d\n", summ);
+    int summ = sum(beteg);    
     return summ;
 }
 
+// 5.
 int fertozottek_szama(gocpont g, beteg b)
 {
     beteg beteg = b;
     if (keres(g->beteg, b) != NULL)
     {
-        int summ = sum(beteg) - 1; // a beteget nem kell szamolni
-        printf("Fertozottek szama: %d\n", summ);
-        return summ;
+        //int summ = sum(beteg) - 1; // a beteget nem kell szamolni
+        //printf("Fertozottek szama: %d\n", summ);
+        //return summ;
+        return beteg->fertozottek_szama;
     }
     return -1;
 }
