@@ -31,26 +31,28 @@ int fertozobb_e(gocpont g, beteg b1, beteg b2);                     // 10. OK
 
 // segedfuggvenyek:
 beteg keres(beteg fertozo, beteg keresett);
+beteg keres_szulo(beteg fertozo, beteg keresett);
 void kiir(beteg beteg);
-int sum(beteg beteg);
+//int sum(beteg beteg);
 int fertozottek_szama_rekurziv(gocpont g, beteg b);
+void beteg_torol_gocpontbol(gocpont g, beteg b);
 void beteg_torol_rekurziv(beteg beteg);                              // betegek torlese rekurzivan, meghivja a void beteg_torol(beteg b) eljarast
 void PrintTree(gocpont g);
 void print_structure ( beteg beteg, int szint, int irany );
-
+int szamol_rekurziv(beteg b);
 
 int main()
 {
-    // 2. Uj beteg letrehozasa azonositoval
-    beteg b0, b11, b12, b13, b21, b22, bx, by;
-    b0 = uj_beteg(01);
-    b11 = uj_beteg(11);
-    b12 = uj_beteg(12);
-    b13 = uj_beteg(13);
-    b21 = uj_beteg(21);
-    b22 = uj_beteg(22);
-    bx = uj_beteg(98);
-    by = uj_beteg(99);
+    // 2. Uj beteg letrehozasa azonositoval    
+    beteg b0 = uj_beteg(01);
+    beteg b11 = uj_beteg(11);
+    beteg b12 = uj_beteg(12);
+    beteg b13 = uj_beteg(13);
+    beteg b21 = uj_beteg(111);
+    beteg b22 = uj_beteg(112);
+    beteg bx = uj_beteg(131);
+    beteg by = uj_beteg(132);
+    beteg b113 = uj_beteg(113);
 
     // 2. Uj gocpont
     gocpont g = uj_gocpont(b0);
@@ -60,9 +62,10 @@ int main()
     uj_beteg_fertozes(g, b0, b12);
     uj_beteg_fertozes(g, b0, b13);
     uj_beteg_fertozes(g, b11, b21);
-    //uj_beteg_fertozes(g, b11, b22);
-    //uj_beteg_fertozes(g, b13, bx);
-    //uj_beteg_fertozes(g, b13, by);
+    uj_beteg_fertozes(g, b11, b22);
+    uj_beteg_fertozes(g, b11, b113);
+    uj_beteg_fertozes(g, b13, bx);
+    uj_beteg_fertozes(g, b13, by);
 
     // 7.
     kiir_gocpont(g);
@@ -70,27 +73,26 @@ int main()
     PrintTree(g);
 
     // 4.
-    printf("Letszam g-ben: %d\n\n", letszam(g));
+    printf(" 4. Letszam g-ben: %d\n\n", letszam(g));
 
     // 5.
-    printf("b0  altal megfertozottek szama: %d\n", fertozottek_szama(g, b0));
-    printf("b11 altal megfertozottek szama: %d\n", fertozottek_szama(g, b11));
-    printf("b12 altal megfertozottek szama: %d\n", fertozottek_szama(g, b12));
-    printf("b13 altal megfertozottek szama: %d\n\n", fertozottek_szama(g, b13));
+    printf(" 5. b0  altal megfertozottek szama: %d\n", fertozottek_szama(g, b0));
+    printf(" 5. b11 altal megfertozottek szama: %d\n", fertozottek_szama(g, b11));
+    printf(" 5. b12 altal megfertozottek szama: %d\n", fertozottek_szama(g, b12));
+    printf(" 5. b13 altal megfertozottek szama: %d\n\n", fertozottek_szama(g, b13));
 
     // 8.
-    printf("Fertozott-e g-ben #%d? %s \n", b21->id, fertozott_e(g, b21) ? "igen" : "nem" );
+    printf(" 8. Fertozott-e g-ben #%d? %s \n", b21->id, fertozott_e(g, b21) ? "igen" : "nem" );
 
     // 9.
-    printf("Megfertozte-e g-ben #%d beteg #%d beteget? %s \n", b11->id, b22->id, megfertozte_e(g, b11, b22) ? "igen" : "nem" );
-    printf("Megfertozte-e g-ben #%d beteg #%d beteget? %s \n", b11->id, b13->id, megfertozte_e(g, b11, b13) ? "igen" : "nem" );
+    printf(" 9. Megfertozte-e g-ben #%d beteg #%d beteget? %s \n", b11->id, b22->id, megfertozte_e(g, b11, b22) ? "igen" : "nem" );
+    printf(" 9. Megfertozte-e g-ben #%d beteg #%d beteget? %s \n", b11->id, b13->id, megfertozte_e(g, b11, b13) ? "igen" : "nem" );
 
     // 10. Fertozobb-e?
-
     beteg beteg1 = b12;
     beteg beteg2 = b11;
 
-    printf("Fertozobb-e g-ben #%d beteg #%d betegnel? ", beteg1->id, beteg2->id);
+    printf("10. Fertozobb-e g-ben #%d beteg #%d betegnel? ", beteg1->id, beteg2->id);
     switch (fertozobb_e(g, beteg1, beteg2))
     {
         case (1):
@@ -106,13 +108,19 @@ int main()
     printf("\n");
 
 
-    //beteg_torol(b13);
-    //PrintTree(g);
+
+    //beteg_torol(b11);
+    //beteg_torol_rekurziv(b11);        // a beteg_torol()-t hivja rekurzivan
+    //b11 = NULL;                       // beteg_torol() es beteg_torol_rekurziv() eseten kell a NULL, kulonben a gocpontban nem lesz NULL erteku, hanem 'logo' pointer, memoriaszemet marad. Specifikacioban a torles 'beteg' tipusu kellett volna legyen, hogy onnan vissza lehessen teriteni az erteket, esetleg beteg_torol(gocpont *g)
+    //beteg_torol_gocpontbol(g, b11);   // ez jol torol, a gocpontban a torolt beteg leszarmazottjait is torli, minden torolt elemet felszabadit es NULL-ra allit
+
+    PrintTree(g);
+    printf("Letszam g-ben: %d\n\n", letszam(g));
 
     // 3. Gocpont torlese, benne betegek torlese
     printf("3. gocpont_torol(g) \n");
     gocpont_torol(g);
-    g = NULL;
+    g = NULL;                           // ugyancsak ajanlott, hogy a gocpont ne legyen memoriaszemet
 
     printf("7. kiir_gocpont(g) \n");
     kiir_gocpont(g);
@@ -141,11 +149,11 @@ beteg uj_beteg(int azonosito)
 
 // 3.
 void gocpont_torol(gocpont g)
-{    
+{
     beteg_torol_rekurziv(g->beteg); // betegek torlese rekurzivan
     //g->beteg->fertozottek_szama = 0;
     free(g);
-    g = NULL; // ez jo lenne, de nem lehetseges
+    g = NULL; // ez jo lenne, de nem lehetseges itt
 }
 
 void beteg_torol(beteg b)
@@ -158,7 +166,11 @@ void beteg_torol(beteg b)
 // 4.
 int letszam(gocpont g)
 {
-    return sum(g->beteg) + 1; // g->beteg fertozottei szama rekurzivan + 1 onmaga
+    int szamol = 0;
+    if (g->beteg!= NULL) {
+        szamol = szamol_rekurziv(g->beteg);
+    }
+    return szamol;
 }
 
 // 5.
@@ -167,9 +179,6 @@ int fertozottek_szama(gocpont g, beteg b)
     beteg beteg = b;
     if (keres(g->beteg, b) != NULL)
     {
-        //int summ = sum(beteg) - 1; // a beteget nem kell szamolni
-        //printf("Fertozottek szama: %d\n", summ);
-        //return summ;
         return beteg->fertozottek_szama;
     }
     return -1;
@@ -205,8 +214,7 @@ int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott)
 void kiir_gocpont(gocpont g)
 {
     if (g != NULL)
-    {
-        //beteg beteg = g->beteg;
+    {        
         kiir(g->beteg);
         printf("\n");
     }
@@ -269,7 +277,8 @@ void kiir(beteg beteg)
 }
 
 
-beteg keres(beteg fertozo, beteg keresett) {
+beteg keres(beteg fertozo, beteg keresett)
+{
     if (fertozo->id == keresett->id)
         return fertozo;
 
@@ -280,28 +289,67 @@ beteg keres(beteg fertozo, beteg keresett) {
     return NULL;
 }
 
-
-
-int sum(beteg beteg)
+beteg keres_szulo(beteg fertozo, beteg keresett)
 {
-    if (beteg == NULL)
-        return 0;
-    if (beteg->fertozottek == NULL)
-        return 0;
+    if (fertozo->id == keresett->id)
+        return fertozo;
 
-    for (int i = 0; i < beteg->fertozottek_szama; i++)
-        return sum(beteg->fertozottek[i]) + beteg->fertozottek_szama + 1; // +1 fertozo
+    for (int i = 0; i < fertozo->fertozottek_szama ; i++)
+    {
+        if (fertozo->fertozottek[i]->id == keresett->id)
+            return fertozo;
+        else
+            keres(fertozo->fertozottek[i], keresett);
+    }
 
-    return 0;
+
+    return NULL;
 }
+
+
+
+
+
+int szamol_rekurziv(beteg b)
+{
+    int szamol = 1;
+    for (int i = 0; i < b->fertozottek_szama; i++)
+    {
+        szamol += szamol_rekurziv(b->fertozottek[i]);
+    }
+
+    return szamol;
+}
+
 
 int fertozottek_szama_rekurziv(gocpont g, beteg b)
 {
     beteg beteg = b;
     if (keres(g->beteg, b) != NULL)
-        return sum(beteg) - 1; // a beteget nem kell szamolni;
+        return szamol_rekurziv(beteg) + 1; // a beteget nem kell szamolni;
 
     return -1;
+}
+
+void beteg_torol_gocpontbol(gocpont g, beteg b)
+{
+    beteg szulo = keres_szulo(g->beteg, b); // a torolni kivant beteg szuloje / fertozoje
+    if (szulo == NULL)
+        return;
+
+    int i=0;
+    while (szulo->fertozottek[i]->id != b->id && i < szulo->fertozottek_szama)
+    {
+        i++;
+    }
+
+    for ( ; i < szulo->fertozottek_szama-1; i++)
+        szulo->fertozottek[i] = szulo->fertozottek[i+1];
+
+    szulo->fertozottek_szama--;
+    szulo->fertozottek = realloc(szulo->fertozottek, sizeof (beteg) * (szulo->fertozottek_szama));
+
+    beteg_torol_rekurziv(b);
 }
 
 
