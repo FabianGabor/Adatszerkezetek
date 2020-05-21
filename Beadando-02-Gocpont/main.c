@@ -26,13 +26,14 @@ int uj_beteg_fertozes(gocpont g, beteg fertozo, beteg fertozott);   //  6. OK
 
 void kiir_gocpont(gocpont g);                                       //  7. OK
 int fertozott_e(gocpont g, beteg b);                                //  8. OK
-int megfertozte_e(gocpont g, beteg b1, beteg b2);                   //  9.
-int fertozobb_e(gocpont g, beteg b1, beteg b2);                     // 10.
+int megfertozte_e(gocpont g, beteg b1, beteg b2);                   //  9. OK
+int fertozobb_e(gocpont g, beteg b1, beteg b2);                     // 10. OK
 
 // segedfuggvenyek:
 beteg keres(beteg fertozo, beteg keresett);
 void kiir(beteg beteg);
 int sum(beteg beteg);
+int fertozottek_szama_rekurziv(gocpont g, beteg b);
 void gocpont_beteg_torol(beteg beteg);
 void PrintTree(gocpont g);
 void print_structure ( beteg beteg, int level, int irany );
@@ -50,6 +51,7 @@ int main()
     bx = uj_beteg(98);
     by = uj_beteg(99);
 
+    // 2. Uj gocpont
     gocpont g0 = uj_gocpont(b0);
 
     uj_beteg_fertozes(g0, b0, b11);
