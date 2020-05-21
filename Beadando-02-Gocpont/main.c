@@ -274,7 +274,8 @@ void gocpont_beteg_torol(beteg beteg)
 
 void PrintTree(gocpont g)
 {
-    print_structure(g->beteg, 0, 0);
+    if (g->beteg != NULL)
+        print_structure(g->beteg, 0, 0);
 }
 
 
