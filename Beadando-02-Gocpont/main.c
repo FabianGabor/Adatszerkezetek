@@ -106,13 +106,14 @@ beteg uj_beteg(int azonosito)
     return b;
 }
 
+// 3.
 void gocpont_torol(gocpont g)
 {
     beteg beteg = g->beteg;
     gocpont_beteg_torol(beteg);
     g->beteg->fertozottek_szama = 0;
     free(g);
-    g = NULL;
+    //g = NULL;
 }
 
 void beteg_torol(beteg b)
