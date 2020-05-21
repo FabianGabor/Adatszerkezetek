@@ -201,6 +201,14 @@ int megfertozte_e(gocpont g, beteg b1, beteg b2)
     return 0;
 }
 
+// 10.
+int fertozobb_e(gocpont g, beteg b1, beteg b2)
+{
+    if (fertozottek_szama(g,b1) > fertozottek_szama(g,b2)) return 1;
+    if (fertozottek_szama(g,b1) == fertozottek_szama(g,b2)) return 0;
+    return -1;
+}
+
 
 
 
