@@ -1,3 +1,9 @@
+/*
+ * Fábián Gábor
+ * CXNU8T
+ * https://github.com/FabianGabor/Adatszerkezetek/tree/master/Beadando-01-Pizza
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

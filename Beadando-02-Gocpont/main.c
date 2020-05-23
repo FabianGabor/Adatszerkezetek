@@ -1,3 +1,9 @@
+/*
+ * Fábián Gábor
+ * CXNU8T
+ * https://github.com/FabianGabor/Adatszerkezetek/tree/master/Beadando-02-Gocpont
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
