@@ -174,7 +174,7 @@ void beteg_torol(beteg b)
 {
     if (b != NULL)
         free(b);
-    b = NULL;
+    b = NULL; // igy ezt nem tudja atadni
 }
 
 // 4.
