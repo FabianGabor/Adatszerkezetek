@@ -151,7 +151,6 @@ pizza uj_pizza(int db, char fajta)
 {
     if (db > 0 && db <= 9 && fajta >= 'A' && fajta <= 'F')
     {
-        //pizza p = malloc(sizeof (p));
         pizza p = malloc(sizeof (*p));
 
         p->db = db;
@@ -305,8 +304,7 @@ void plusz_rendeles(havirendeles h, rendeles r) // 9
     {
         TRY
         {
-            rendeles *temp = NULL;
-            //temp = (rendeles *) realloc(h->rendeles, sizeof(r) * (h->mennyiseg + 1) );
+            rendeles *temp = NULL;            
             temp = (rendeles *) realloc(h->rendeles, sizeof(*r) * (h->mennyiseg + 1) );
 
             if (temp == NULL)
